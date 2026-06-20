@@ -195,11 +195,11 @@ def _try_aaii_html():
                 continue
 
             bull    = round(float(rows[0][0]), 1)
-            bear    = round(float(rows[0][1]), 1)
-            neutral = round(float(rows[0][2]), 1)
+            neutral = round(float(rows[0][1]), 1)
+            bear    = round(float(rows[0][2]), 1)
             spread  = round(bull - bear, 1)
-            spread1 = round(float(rows[1][0]) - float(rows[1][1]), 1)
-            history = [round(float(b) - float(br), 1) for b, br, _ in rows[:20]][::-1]
+            spread1 = round(float(rows[1][0]) - float(rows[1][2]), 1)
+            history = [round(float(b) - float(br), 1) for b, _, br in rows[:20]][::-1]
 
             return {
                 "value": spread,
