@@ -195,25 +195,33 @@ def _fred_series(series_id, limit=30):
 #    3순위: FRED UMCSENT (소비자심리 대체 지표)
 # ──────────────────────────────────────────────
 def _try_naaim():
-    """NAAIM Exposure Index (운용사 주식 노출도, 주간) — Bull-Bear 대체"""
+    """NAAIM Exposure Index (운용사 주식 노출도, 주간) — Bull-Bear 대체
+    URL이 날짜마다 바뀌므로 페이지를 먼저 긁어 현재 링크를 찾는다.
+    """
     try:
-        url = "https://www.naaim.org/wp-content/uploads/2013/03/NAAIM-Exposure-Index.xlsx"
-        r = requests.get(url, headers=HEADERS, timeout=20)
-        r.raise_for_status()
-
         import io, zipfile, xml.etree.ElementTree as ET
 
-        # xlsx = zip 파일
+        # 1. NAAIM 페이지에서 현재 xlsx URL 찾기
+        page = requests.get(
+            "https://www.naaim.org/programs/naaim-exposure-index/",
+            headers=HEADERS, timeout=15
+        )
+        page.raise_for_status()
+        links = re.findall(r'href=["\']([^"\']*\.xlsx[^"\']*)["\']', page.text, re.IGNORECASE)
+        if not links:
+            return None
+        xlsx_url = links[0]
+
+        # 2. 엑셀 다운로드
+        r = requests.get(xlsx_url, headers=HEADERS, timeout=20)
+        r.raise_for_status()
+        if r.content[:4] != b'PK\x03\x04':  # xlsx 시그니처 확인
+            return None
+
+        # 3. xlsx = zip 파일, 숫자 컬럼 파싱
         zf = zipfile.ZipFile(io.BytesIO(r.content))
         sheet_xml = zf.read("xl/worksheets/sheet1.xml")
-        shared_xml = zf.read("xl/sharedStrings.xml")
-
-        # sharedStrings 파싱
         ns = {"ns": "http://schemas.openxmlformats.org/spreadsheetml/2006/main"}
-        shared_root = ET.fromstring(shared_xml)
-        strings = [si.find(".//ns:t", ns).text or "" for si in shared_root.findall("ns:si", ns)]
-
-        # 시트에서 숫자 값 추출
         sheet_root = ET.fromstring(sheet_xml)
         rows = sheet_root.findall(".//ns:row", ns)
 
@@ -223,7 +231,8 @@ def _try_naaim():
             if len(cells) >= 2:
                 try:
                     v_el = cells[1].find("ns:v", ns)
-                    if v_el is not None:
+                    t_attr = cells[1].get("t", "")
+                    if v_el is not None and t_attr != "s":  # s=sharedString(문자열) 스킵
                         values.append(round(float(v_el.text), 1))
                 except:
                     pass
@@ -231,9 +240,9 @@ def _try_naaim():
         if len(values) < 2:
             return None
 
-        current  = values[-1]
-        prev     = values[-2]
-        history  = values[-20:]
+        current = values[-1]
+        prev    = values[-2]
+        history = values[-20:]
 
         return {
             "value": current,
@@ -288,23 +297,21 @@ def _try_fred_aaii():
 
 
 def fetch_bull_bear():
-    if not FRED_API_KEY:
-        return {"value": None, "bull": None, "bear": None, "neutral": None,
-                "change_abs": 0, "change_pct": 0, "history": [], "ok": False, "error": "FRED_API_KEY 없음"}
-
-    # 1순위: NAAIM
+    # 1순위: NAAIM (API 키 불필요)
     result = _try_naaim()
     if result:
         return result
 
-    # 2순위: FRED AAII
-    result = _try_fred_aaii()
-    if result:
-        return result
+    # 2순위: FRED AAII (키 필요)
+    if FRED_API_KEY:
+        result = _try_fred_aaii()
+        if result:
+            return result
 
+    err = "NAAIM 수집 실패" if not FRED_API_KEY else "NAAIM·AAII 모두 수집 실패"
     return {"value": None, "bull": None, "bear": None, "neutral": None,
             "change_abs": 0, "change_pct": 0, "history": [], "ok": False,
-            "error": "NAAIM·AAII 모두 수집 실패"}
+            "error": err}
 
 
 # ──────────────────────────────────────────────
