@@ -1,6 +1,6 @@
 {
-  "updated_at": "2026-06-20 22:39 KST",
-  "updated_at_unix": 1781962755,
+  "updated_at": "2026-06-20 22:45 KST",
+  "updated_at_unix": 1781963104,
   "indicators": {
     "tenyear": {
       "name": "미 10년물 금리",
@@ -68,7 +68,7 @@
     },
     "wti": {
       "name": "유가 (WTI)",
-      "unit": "$",
+      "unit": "USD",
       "source": "yfinance",
       "value": 76.54,
       "prev": 75.85,
@@ -238,7 +238,7 @@
       "change_pct": 0,
       "history": [],
       "ok": false,
-      "error": "400 Client Error: Bad Request for url: https://api.stlouisfed.org/fred/series/observations?series_id=AAIIBULL&api_key=34602a701f19caa4d4d605935d0ad12c&sort_order=desc&limit=20&file_type=json"
+      "error": "NAAIM·AAII 모두 수집 실패"
     },
     "margindebt": {
       "name": "Margin Debt YoY",
