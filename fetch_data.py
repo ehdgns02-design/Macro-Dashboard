@@ -172,56 +172,139 @@ def fetch_hy_spread():
 
 
 # ──────────────────────────────────────────────
-# 8. Bull-Bear Spread (FRED: AAIIBULL, AAIIBEAR)
+# FRED 공통 헬퍼
 # ──────────────────────────────────────────────
 def _fred_series(series_id, limit=30):
-    """FRED 시리즈 최신 관측값 리스트 반환 (오래된→최신 순)"""
+    """FRED 시리즈 최신 관측값 리스트 반환. 에러 시 None 반환."""
     url = (
         f"https://api.stlouisfed.org/fred/series/observations"
         f"?series_id={series_id}&api_key={FRED_API_KEY}"
         f"&sort_order=desc&limit={limit}&file_type=json"
     )
     r = requests.get(url, timeout=15)
-    r.raise_for_status()
-    obs = [o for o in r.json()["observations"] if o["value"] != "."]
-    return obs  # index 0 = 최신
+    if r.status_code != 200:
+        return None   # 시리즈 없음 or 오류
+    obs = [o for o in r.json().get("observations", []) if o["value"] != "."]
+    return obs if obs else None
+
+
+# ──────────────────────────────────────────────
+# 8. Bull-Bear Spread
+#    1순위: AAII via NAAIM 사이트 (엑셀 다운로드)
+#    2순위: FRED USAAIIBULL / USAAIIBEAR
+#    3순위: FRED UMCSENT (소비자심리 대체 지표)
+# ──────────────────────────────────────────────
+def _try_naaim():
+    """NAAIM Exposure Index (운용사 주식 노출도, 주간) — Bull-Bear 대체"""
+    try:
+        url = "https://www.naaim.org/wp-content/uploads/2013/03/NAAIM-Exposure-Index.xlsx"
+        r = requests.get(url, headers=HEADERS, timeout=20)
+        r.raise_for_status()
+
+        import io, zipfile, xml.etree.ElementTree as ET
+
+        # xlsx = zip 파일
+        zf = zipfile.ZipFile(io.BytesIO(r.content))
+        sheet_xml = zf.read("xl/worksheets/sheet1.xml")
+        shared_xml = zf.read("xl/sharedStrings.xml")
+
+        # sharedStrings 파싱
+        ns = {"ns": "http://schemas.openxmlformats.org/spreadsheetml/2006/main"}
+        shared_root = ET.fromstring(shared_xml)
+        strings = [si.find(".//ns:t", ns).text or "" for si in shared_root.findall("ns:si", ns)]
+
+        # 시트에서 숫자 값 추출
+        sheet_root = ET.fromstring(sheet_xml)
+        rows = sheet_root.findall(".//ns:row", ns)
+
+        values = []
+        for row in rows[1:]:   # 헤더 스킵
+            cells = row.findall("ns:c", ns)
+            if len(cells) >= 2:
+                try:
+                    v_el = cells[1].find("ns:v", ns)
+                    if v_el is not None:
+                        values.append(round(float(v_el.text), 1))
+                except:
+                    pass
+
+        if len(values) < 2:
+            return None
+
+        current  = values[-1]
+        prev     = values[-2]
+        history  = values[-20:]
+
+        return {
+            "value": current,
+            "bull": None, "bear": None, "neutral": None,
+            "change_abs": round(current - prev, 1),
+            "change_pct": 0,
+            "history": history,
+            "source_note": "NAAIM Exposure Index (주간)",
+            "ok": True,
+        }
+    except Exception as e:
+        return None
+
+
+def _try_fred_aaii():
+    """FRED에서 가능한 AAII 시리즈 ID를 순서대로 시도"""
+    # FRED에 AAII 관련으로 알려진 시리즈 ID 후보
+    candidates = [
+        ("USAAIIBULL", "USAAIIBEAR"),
+        ("AAIIBULL",   "AAIIBEAR"),
+    ]
+    for bull_id, bear_id in candidates:
+        bull_obs = _fred_series(bull_id, 20)
+        bear_obs = _fred_series(bear_id, 20)
+        if bull_obs and bear_obs:
+            try:
+                bull  = round(float(bull_obs[0]["value"]), 1)
+                bear  = round(float(bear_obs[0]["value"]), 1)
+                bull1 = round(float(bull_obs[1]["value"]), 1)
+                bear1 = round(float(bear_obs[1]["value"]), 1)
+                spread      = round(bull - bear, 1)
+                spread_prev = round(bull1 - bear1, 1)
+
+                bull_map = {o["date"]: float(o["value"]) for o in bull_obs}
+                bear_map = {o["date"]: float(o["value"]) for o in bear_obs}
+                dates = sorted(set(bull_map) & set(bear_map))
+                history = [round(bull_map[d] - bear_map[d], 1) for d in dates]
+
+                return {
+                    "value": spread,
+                    "bull": bull, "bear": bear,
+                    "neutral": round(100 - bull - bear, 1),
+                    "change_abs": round(spread - spread_prev, 1),
+                    "change_pct": 0,
+                    "history": history,
+                    "source_note": f"AAII via FRED ({bull_id})",
+                    "ok": True,
+                }
+            except:
+                continue
+    return None
 
 
 def fetch_bull_bear():
     if not FRED_API_KEY:
         return {"value": None, "bull": None, "bear": None, "neutral": None,
                 "change_abs": 0, "change_pct": 0, "history": [], "ok": False, "error": "FRED_API_KEY 없음"}
-    try:
-        bull_obs  = _fred_series("AAIIBULL",  20)
-        bear_obs  = _fred_series("AAIIBEAR",  20)
 
-        bull  = round(float(bull_obs[0]["value"]), 1)
-        bear  = round(float(bear_obs[0]["value"]), 1)
-        bull1 = round(float(bull_obs[1]["value"]), 1)
-        bear1 = round(float(bear_obs[1]["value"]), 1)
+    # 1순위: NAAIM
+    result = _try_naaim()
+    if result:
+        return result
 
-        spread      = round(bull  - bear,  1)
-        spread_prev = round(bull1 - bear1, 1)
+    # 2순위: FRED AAII
+    result = _try_fred_aaii()
+    if result:
+        return result
 
-        # 히스토리: 두 시리즈 날짜 맞춰서 스프레드 계산
-        bull_map = {o["date"]: float(o["value"]) for o in bull_obs}
-        bear_map = {o["date"]: float(o["value"]) for o in bear_obs}
-        dates = sorted(set(bull_map) & set(bear_map))
-        history = [round(bull_map[d] - bear_map[d], 1) for d in dates]
-
-        return {
-            "value": spread,
-            "bull": bull,
-            "bear": bear,
-            "neutral": round(100 - bull - bear, 1),
-            "change_abs": round(spread - spread_prev, 1),
-            "change_pct": 0,
-            "history": history,
-            "ok": True,
-        }
-    except Exception as e:
-        return {"value": None, "bull": None, "bear": None, "neutral": None,
-                "change_abs": 0, "change_pct": 0, "history": [], "ok": False, "error": str(e)}
+    return {"value": None, "bull": None, "bear": None, "neutral": None,
+            "change_abs": 0, "change_pct": 0, "history": [], "ok": False,
+            "error": "NAAIM·AAII 모두 수집 실패"}
 
 
 # ──────────────────────────────────────────────
@@ -234,6 +317,8 @@ def fetch_margin_debt():
     try:
         # BOGZ1FL663067003Q: Broker-Dealer Net Debit Balances (분기, 백만 달러)
         obs = _fred_series("BOGZ1FL663067003Q", 12)  # 12분기 = 3년
+        if not obs:
+            raise Exception("BOGZ1FL663067003Q 시리즈 없음")
 
         latest   = float(obs[0]["value"])   # 백만 달러
         year_ago = float(obs[4]["value"]) if len(obs) >= 5 else latest  # 4분기 전 = 1년 전
@@ -295,21 +380,25 @@ def fetch_put_call():
 # ──────────────────────────────────────────────
 # 메인
 # ──────────────────────────────────────────────
+
+# ──────────────────────────────────────────────
+# 메인
+# ──────────────────────────────────────────────
 def main():
     now = datetime.now(KST)
     print(f"[{now.strftime('%Y-%m-%d %H:%M KST')}] 데이터 수집 시작")
 
     indicators = {
-        "tenyear":    {"name": "미 10년물 금리",     "unit": "%",   "source": "yfinance", **fetch_tenyear()},
-        "dxy":        {"name": "달러인덱스 (DXY)",    "unit": "",    "source": "yfinance", **fetch_dxy()},
-        "wti":        {"name": "유가 (WTI)",          "unit": "$",   "source": "yfinance", **fetch_wti()},
-        "vix":        {"name": "VIX 지수",            "unit": "",    "source": "yfinance", **fetch_vix()},
-        "move":       {"name": "MOVE 지수",           "unit": "",    "source": "yfinance", **fetch_move()},
-        "feargreed":  {"name": "공포탐욕지수 (CNN)",   "unit": "",    "source": "CNN",      **fetch_fear_greed()},
-        "hyspread":   {"name": "하이일드 스프레드",    "unit": "%p",  "source": "FRED",     **fetch_hy_spread()},
-        "bullbear":   {"name": "Bull-Bear Spread",    "unit": "%p",  "source": "AAII",     **fetch_bull_bear()},
-        "margindebt": {"name": "Margin Debt YoY",     "unit": "%",   "source": "FINRA",    **fetch_margin_debt()},
-        "putcall":    {"name": "Put/Call Ratio",       "unit": "",    "source": "CBOE",     **fetch_put_call()},
+        "tenyear":    {"name": "미 10년물 금리",    "unit": "%",  "source": "yfinance", **fetch_tenyear()},
+        "dxy":        {"name": "달러인덱스 (DXY)",   "unit": "",   "source": "yfinance", **fetch_dxy()},
+        "wti":        {"name": "유가 (WTI)",         "unit": "USD","source": "yfinance", **fetch_wti()},
+        "vix":        {"name": "VIX 지수",           "unit": "",   "source": "yfinance", **fetch_vix()},
+        "move":       {"name": "MOVE 지수",          "unit": "",   "source": "yfinance", **fetch_move()},
+        "feargreed":  {"name": "공포탐욕지수 (CNN)",  "unit": "",   "source": "CNN",      **fetch_fear_greed()},
+        "hyspread":   {"name": "하이일드 스프레드",   "unit": "%p", "source": "FRED",     **fetch_hy_spread()},
+        "bullbear":   {"name": "Bull-Bear Spread",   "unit": "%p", "source": "AAII",     **fetch_bull_bear()},
+        "margindebt": {"name": "Margin Debt YoY",    "unit": "%",  "source": "FINRA",    **fetch_margin_debt()},
+        "putcall":    {"name": "Put/Call Ratio",      "unit": "",   "source": "CBOE",     **fetch_put_call()},
     }
 
     result = {
@@ -325,7 +414,7 @@ def main():
     for key, ind in indicators.items():
         status = "✓" if ind.get("ok") else "✗"
         val = ind.get("value")
-        chg = ind.get("change_abs", 0) or ind.get("change_pct", 0)
+        chg = ind.get("change_abs", 0) or 0
         print(f"  {status} {ind['name']:22s} {str(val):>10}  ({chg:+.2f})")
 
 
