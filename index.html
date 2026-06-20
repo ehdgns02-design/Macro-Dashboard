@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>매크로 지표 대시보드</title>
+  <style>
+    :root {
+      --bg: #0f1117;
+      --bg2: #1a1d27;
+      --bg3: #22263a;
+      --border: rgba(255,255,255,0.08);
+      --border2: rgba(255,255,255,0.14);
+      --text: #e8eaf0;
+      --text2: #8b92a8;
+      --text3: #5a6070;
+      --green: #00d4aa;
+      --green-bg: rgba(0,212,170,0.1);
+      --red: #ff6b6b;
+      --red-bg: rgba(255,107,107,0.1);
+      --amber: #ffaa00;
+      --amber-bg: rgba(255,170,0,0.1);
+      --blue: #4a9eff;
+      --accent: #6c7bff;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+    }
+
+    /* ── 헤더 ── */
+    .header {
+      border-bottom: 1px solid var(--border);
+      padding: 18px 24px 16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .header-left h1 {
+      font-size: 17px;
+      font-weight: 600;
+      letter-spacing: -0.3px;
+      color: var(--text);
+    }
+    .header-left p {
+      font-size: 12px;
+      color: var(--text2);
+      margin-top: 3px;
+    }
+    .header-right { display: flex; align-items: center; gap: 10px; }
+    .badge-live {
+      display: inline-flex; align-items: center; gap: 6px;
+      font-size: 11px; font-weight: 500; color: var(--green);
+      background: var(--green-bg);
+      padding: 4px 10px; border-radius: 20px;
+      border: 1px solid rgba(0,212,170,0.2);
+    }
+    .dot {
+      width: 6px; height: 6px; border-radius: 50%;
+      background: var(--green);
+      animation: pulse 2s infinite;
+    }
+    @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
+    .btn-refresh {
+      font-size: 12px; color: var(--text2);
+      background: var(--bg3); border: 1px solid var(--border2);
+      padding: 5px 12px; border-radius: 8px; cursor: pointer;
+      transition: all 0.15s;
+    }
+    .btn-refresh:hover { color: var(--text); border-color: var(--border2); }
+
+    /* ── 메인 ── */
+    .main { padding: 20px 24px 32px; max-width: 1120px; margin: 0 auto; }
+    .section-label {
+      font-size: 10px; font-weight: 600; letter-spacing: 0.1em;
+      text-transform: uppercase; color: var(--text3);
+      margin: 20px 0 10px;
+    }
+    .section-label:first-child { margin-top: 0; }
+
+    /* ── 그리드 ── */
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 10px;
+    }
+    @media (max-width: 900px) { .grid { grid-template-columns: repeat(3, 1fr); } }
+    @media (max-width: 600px) { .grid { grid-template-columns: repeat(2, 1fr); } }
+
+    /* ── 카드 ── */
+    .card {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 14px 14px 12px 17px;
+      position: relative;
+      overflow: hidden;
+      transition: border-color 0.15s;
+    }
+    .card:hover { border-color: var(--border2); }
+    .card-accent {
+      position: absolute; left: 0; top: 0; bottom: 0;
+      width: 3px; border-radius: 12px 0 0 12px;
+    }
+    .acc-green { background: var(--green); }
+    .acc-amber { background: var(--amber); }
+    .acc-red   { background: var(--red); }
+    .acc-gray  { background: var(--text3); }
+
+    .card-top {
+      display: flex; justify-content: space-between;
+      align-items: flex-start; margin-bottom: 8px;
+    }
+    .card-name {
+      font-size: 10.5px; color: var(--text2); font-weight: 500;
+      line-height: 1.4; max-width: 85px;
+    }
+    .signal {
+      font-size: 9.5px; font-weight: 600;
+      padding: 2px 7px; border-radius: 20px;
+      white-space: nowrap; flex-shrink: 0;
+    }
+    .sig-green { background: var(--green-bg); color: var(--green); }
+    .sig-amber { background: var(--amber-bg); color: var(--amber); }
+    .sig-red   { background: var(--red-bg);   color: var(--red);   }
+    .sig-gray  { background: rgba(90,96,112,0.2); color: var(--text3); }
+
+    .card-value {
+      font-size: 22px; font-weight: 600;
+      letter-spacing: -0.5px;
+      color: var(--text); line-height: 1;
+      margin-bottom: 5px;
+    }
+    .card-unit { font-size: 13px; font-weight: 400; color: var(--text2); }
+    .card-sub  { font-size: 10.5px; color: var(--text2); margin-bottom: 10px; }
+    .change-up   { color: var(--red);   font-weight: 600; }
+    .change-down { color: var(--green); font-weight: 600; }
+    .change-up-g { color: var(--green); font-weight: 600; }
+
+    /* ── 스파크라인 SVG ── */
+    .spark { display: block; width: 100%; height: 28px; }
+
+    /* ── 게이지 ── */
+    .gauge-wrap { margin-top: 6px; }
+    .gauge-track {
+      height: 4px; border-radius: 2px;
+      background: var(--bg3); overflow: hidden;
+    }
+    .gauge-fill { height: 100%; border-radius: 2px; transition: width 0.6s ease; }
+    .gauge-labels {
+      display: flex; justify-content: space-between;
+      margin-top: 3px;
+    }
+    .gauge-labels span { font-size: 9px; color: var(--text3); }
+
+    /* ── 푸터 ── */
+    .footer {
+      border-top: 1px solid var(--border);
+      padding: 14px 24px;
+      display: flex; justify-content: space-between;
+      align-items: center; flex-wrap: wrap; gap: 8px;
+    }
+    .footer p { font-size: 10.5px; color: var(--text3); line-height: 1.6; }
+
+    /* ── 로딩 / 에러 ── */
+    .loading {
+      text-align: center; padding: 80px 20px;
+      color: var(--text2); font-size: 14px;
+    }
+    .error-badge {
+      display: inline-block; font-size: 9px;
+      background: var(--red-bg); color: var(--red);
+      padding: 1px 5px; border-radius: 6px; margin-left: 4px;
+    }
+    .na { color: var(--text3); font-size: 16px; }
+  </style>
+</head>
+<body>
+
+<div id="app">
+  <div class="loading">데이터 로딩 중...</div>
+</div>
+
+<script>
+// ──────────────────────────────────────────────
+// 신호 판정 로직
+// ──────────────────────────────────────────────
+const SIGNALS = {
+  tenyear:    v => v < 3.5 ? 'green' : v < 4.5 ? 'amber' : 'red',
+  dxy:        v => v < 100 ? 'green' : v < 106 ? 'amber' : 'red',
+  wti:        v => v < 70  ? 'green' : v < 90  ? 'amber' : 'red',
+  vix:        v => v < 20  ? 'green' : v < 30  ? 'amber' : 'red',
+  move:       v => v < 100 ? 'green' : v < 130 ? 'amber' : 'red',
+  feargreed:  v => v < 30  ? 'amber' : v < 65  ? 'green' : 'red',   // 극도공포=amber, 중립=green, 탐욕=red
+  hyspread:   v => v < 3   ? 'green' : v < 5   ? 'amber' : 'red',
+  bullbear:   v => v < -10 ? 'amber' : v < 20  ? 'green' : 'red',   // 과도낙관=red
+  margindebt: v => v === null ? 'gray' : v < 10 ? 'green' : v < 20 ? 'amber' : 'red',
+  putcall:    v => v > 1.1 ? 'amber' : v > 0.7 ? 'green' : 'red',   // 낮으면 과열
+};
+
+const SIGNAL_LABELS = {
+  green: '안정', amber: '주의', red: '위험', gray: 'N/A'
+};
+
+const SIGNAL_CLASSES = {
+  green: 'sig-green acc-green',
+  amber: 'sig-amber acc-amber',
+  red:   'sig-red   acc-red',
+  gray:  'sig-gray  acc-gray',
+};
+
+function getSignal(key, value) {
+  if (value === null || value === undefined) return 'gray';
+  const fn = SIGNALS[key];
+  return fn ? fn(value) : 'gray';
+}
+
+// ──────────────────────────────────────────────
+// SVG 스파크라인
+// ──────────────────────────────────────────────
+function sparkline(history, color) {
+  if (!history || history.length < 2) return '';
+  const W = 120, H = 28, pad = 2;
+  const min = Math.min(...history);
+  const max = Math.max(...history);
+  const range = max - min || 1;
+  const pts = history.map((v, i) => {
+    const x = pad + (i / (history.length - 1)) * (W - pad * 2);
+    const y = H - pad - ((v - min) / range) * (H - pad * 2);
+    return `${x.toFixed(1)},${y.toFixed(1)}`;
+  });
+  return `<svg class="spark" viewBox="0 0 ${W} ${H}" preserveAspectRatio="none">
+    <polyline points="${pts.join(' ')}"
+      fill="none" stroke="${color}" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round"/>
+  </svg>`;
+}
+
+// ──────────────────────────────────────────────
+// 변화량 포맷
+// ──────────────────────────────────────────────
+function fmtChange(key, ind) {
+  const v = ind.change_abs;
+  if (v === null || v === undefined) return '<span class="na">—</span>';
+  const sign = v >= 0 ? '▲' : '▼';
+  const cls = changeClass(key, v);
+  const abs = Math.abs(v).toFixed(key === 'feargreed' ? 1 : key === 'tenyear' || key === 'hyspread' ? 2 : 2);
+  const pct = (ind.change_pct !== undefined && ind.change_pct !== 0)
+    ? ` (${v >= 0 ? '+' : ''}${ind.change_pct.toFixed(1)}%)` : '';
+  return `<span class="${cls}">${sign} ${abs}${pct}</span>`;
+}
+
+// 지표별로 up/down 색 방향이 다름
+const UP_IS_BAD = new Set(['tenyear','dxy','vix','move','hyspread','margindebt']);
+const UP_NEUTRAL = new Set(['feargreed','bullbear','putcall']);
+
+function changeClass(key, v) {
+  if (v === 0) return '';
+  if (UP_NEUTRAL.has(key)) return '';
+  if (UP_IS_BAD.has(key)) return v > 0 ? 'change-up' : 'change-down';
+  return v > 0 ? 'change-up-g' : 'change-up';   // wti: up = 애매하나 일단 green
+}
+
+// ──────────────────────────────────────────────
+// 값 포맷
+// ──────────────────────────────────────────────
+function fmtValue(key, ind) {
+  const v = ind.value;
+  if (v === null || v === undefined) return '<span class="na">N/A</span>';
+  const unit = ind.unit || '';
+  const prefix = key === 'wti' ? '$' : '';
+
+  if (key === 'tenyear')    return `${v.toFixed(2)}<span class="card-unit">%</span>`;
+  if (key === 'dxy')        return `${v.toFixed(1)}`;
+  if (key === 'wti')        return `<span style="font-size:14px;color:var(--text2)">$</span>${v.toFixed(1)}`;
+  if (key === 'vix')        return `${v.toFixed(1)}`;
+  if (key === 'move')       return `${v.toFixed(1)}`;
+  if (key === 'feargreed')  return `${Math.round(v)}`;
+  if (key === 'hyspread')   return `${v.toFixed(2)}<span class="card-unit">%p</span>`;
+  if (key === 'bullbear')   return `${v >= 0 ? '+' : ''}${v.toFixed(1)}<span class="card-unit">%p</span>`;
+  if (key === 'margindebt') return `${v >= 0 ? '+' : ''}${v.toFixed(1)}<span class="card-unit">%</span>`;
+  if (key === 'putcall')    return `${v.toFixed(2)}`;
+  return `${v}`;
+}
+
+// ──────────────────────────────────────────────
+// 카드 서브 텍스트
+// ──────────────────────────────────────────────
+function fmtSub(key, ind) {
+  if (key === 'feargreed') return ind.rating ? `${ind.rating} · 0=공포 100=탐욕` : '';
+  if (key === 'bullbear') {
+    const b = ind.bull, be = ind.bear;
+    return (b && be) ? `Bull ${b}% / Bear ${be}% · AAII 주간` : 'AAII 주간';
+  }
+  if (key === 'margindebt') return `YoY 변화율 · 월간 (FINRA)`;
+  if (key === 'putcall') return '0.7↓ 과열 · 1.2↑ 공포 · CBOE';
+  if (key === 'move') return '채권시장 VIX';
+  if (key === 'hyspread') return `ICE BofA HY · FRED${ind.date ? ' · ' + ind.date : ''}`;
+  return '';
+}
+
+// ──────────────────────────────────────────────
+// 게이지
+// ──────────────────────────────────────────────
+function renderGauge(key, ind, sigColor) {
+  const colorMap = { green: 'var(--green)', amber: 'var(--amber)', red: 'var(--red)', gray: 'var(--text3)' };
+  const c = colorMap[sigColor];
+
+  if (key === 'feargreed') {
+    const pct = Math.min(100, Math.max(0, ind.value || 0));
+    return `<div class="gauge-wrap">
+      <div class="gauge-track">
+        <div class="gauge-fill" style="width:${pct}%;background:linear-gradient(90deg,#ff6b6b,#ffaa00,#00d4aa,#ffaa00,#ff6b6b)"></div>
+      </div>
+      <div class="gauge-labels"><span>공포 0</span><span>탐욕 100</span></div>
+    </div>`;
+  }
+  if (key === 'putcall') {
+    // 0.5~1.5 범위를 0~100%로 매핑
+    const pct = Math.min(100, Math.max(0, ((ind.value || 0.7) - 0.5) / 1.0 * 100));
+    return `<div class="gauge-wrap">
+      <div class="gauge-track">
+        <div class="gauge-fill" style="width:${pct}%;background:${c}"></div>
+      </div>
+      <div class="gauge-labels"><span>과열 ↓0.7</span><span>공포 ↑1.2</span></div>
+    </div>`;
+  }
+  if (key === 'bullbear') {
+    const pct = Math.min(100, Math.max(0, ((ind.value || 0) + 40) / 80 * 100));
+    return `<div class="gauge-wrap">
+      <div class="gauge-track">
+        <div class="gauge-fill" style="width:${pct}%;background:${c}"></div>
+      </div>
+      <div class="gauge-labels"><span>약세</span><span>강세</span></div>
+    </div>`;
+  }
+  return sparkline(ind.history, c);
+}
+
+// ──────────────────────────────────────────────
+// 카드 렌더
+// ──────────────────────────────────────────────
+const GAUGE_KEYS = new Set(['feargreed','putcall','bullbear']);
+
+function renderCard(key, ind) {
+  const sig = getSignal(key, ind.yoy !== undefined ? ind.yoy : ind.value);
+  const [sigCls, accCls] = SIGNAL_CLASSES[sig].split(' ');
+  const colorMap = { green: 'var(--green)', amber: 'var(--amber)', red: 'var(--red)', gray: 'var(--text3)' };
+  const sparkColor = colorMap[sig];
+  const sub = fmtSub(key, ind);
+  const useGauge = GAUGE_KEYS.has(key);
+
+  const errorBadge = (!ind.ok && ind.value === null)
+    ? '<span class="error-badge">수집오류</span>' : '';
+
+  return `
+  <div class="card">
+    <div class="card-accent ${accCls}"></div>
+    <div class="card-top">
+      <span class="card-name">${ind.name}${errorBadge}</span>
+      <span class="signal ${sigCls}">${SIGNAL_LABELS[sig]}</span>
+    </div>
+    <div class="card-value">${fmtValue(key, ind)}</div>
+    ${sub ? `<div class="card-sub">${sub}</div>` : ''}
+    <div class="card-sub">${fmtChange(key, ind)} 전일 대비</div>
+    ${useGauge
+      ? renderGauge(key, ind, sig)
+      : sparkline(ind.history, sparkColor)
+    }
+  </div>`;
+}
+
+// ──────────────────────────────────────────────
+// 전체 렌더
+// ──────────────────────────────────────────────
+const GROUPS = [
+  { label: '금리 · 환율 · 원자재 · 변동성', keys: ['tenyear','dxy','wti','vix','move'] },
+  { label: '심리 · 신용 · 포지션',          keys: ['feargreed','hyspread','bullbear','margindebt','putcall'] },
+];
+
+function render(data) {
+  const sources = {
+    yfinance: '^TNX · DX-Y.NYB · CL=F · ^VIX · ^MOVE',
+    '': 'CNN Fear&amp;Greed · FRED (BAMLH0A0HYM2) · AAII · FINRA · CBOE',
+  };
+
+  let html = `
+  <div class="header">
+    <div class="header-left">
+      <h1>📊 매크로 지표 대시보드</h1>
+      <p>업데이트: ${data.updated_at}</p>
+    </div>
+    <div class="header-right">
+      <span class="badge-live"><span class="dot"></span>LIVE</span>
+      <button class="btn-refresh" onclick="loadData()">↺ 새로고침</button>
+    </div>
+  </div>
+  <div class="main">`;
+
+  for (const group of GROUPS) {
+    html += `<div class="section-label">${group.label}</div>`;
+    html += `<div class="grid">`;
+    for (const key of group.keys) {
+      html += renderCard(key, data.indicators[key]);
+    }
+    html += `</div>`;
+  }
+
+  html += `</div>
+  <div class="footer">
+    <p>데이터 소스: yfinance · CNN · FRED · AAII · FINRA · CBOE<br>
+       GitHub Actions 자동 업데이트 · 매일 06:00 KST</p>
+    <p style="text-align:right">마지막 업데이트<br><strong style="color:var(--text)">${data.updated_at}</strong></p>
+  </div>`;
+
+  document.getElementById('app').innerHTML = html;
+}
+
+// ──────────────────────────────────────────────
+// 데이터 로드
+// ──────────────────────────────────────────────
+function loadData() {
+  fetch('data.json?t=' + Date.now())
+    .then(r => r.json())
+    .then(render)
+    .catch(err => {
+      document.getElementById('app').innerHTML =
+        `<div class="loading">데이터 로드 실패<br><small style="color:#ff6b6b">${err.message}</small><br><br>
+         <button class="btn-refresh" onclick="loadData()">다시 시도</button></div>`;
+    });
+}
+
+loadData();
+</script>
+</body>
+</html>
