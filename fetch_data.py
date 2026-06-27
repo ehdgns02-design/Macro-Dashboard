@@ -94,6 +94,10 @@ def fetch_nasdaq():
     return get_yf("^IXIC")
 
 
+def fetch_dow():
+    return get_yf("^DJI")
+
+
 # ──────────────────────────────────────────────
 # 6. CNN Fear & Greed
 # ──────────────────────────────────────────────
@@ -367,16 +371,19 @@ def main():
         return result or {"value": None, "change_abs": 0, "change_pct": 0, "history": [], "ok": False, "error": "fetch failed"}
 
     indicators = {
-        "tenyear":    {"name": "미 10년물 금리",      "unit": "%",  "source": "yfinance", **fetch_tenyear()},
+        "sp500":      {"name": "S&P 500",        "unit": "",   "source": "yfinance", **fetch_sp500()},
+        "nasdaq":     {"name": "NASDAQ",          "unit": "",   "source": "yfinance", **fetch_nasdaq()},
+        "dow":        {"name": "다우존스",          "unit": "",   "source": "yfinance", **fetch_dow()},
+        "tenyear":    {"name": "미 10년물 금리",   "unit": "%",  "source": "yfinance", **fetch_tenyear()},
         "dxy":        {"name": "달러인덱스 (DXY)", "unit": "",   "source": "yfinance", **fetch_dxy()},
-        "wti":        {"name": "유가 (WTI)",      "unit": "USD","source": "yfinance", **fetch_wti()},
-        "vix":        {"name": "VIX 지수",                "unit": "",   "source": "yfinance", **fetch_vix()},
-        "move":       {"name": "MOVE 지수",         "unit": "",   "source": "yfinance", **fetch_move()},
-        "feargreed":  {"name": "공포탐욕지수 (CNN)", "unit": "",   "source": "CNN",      **fetch_fear_greed()},
-        "hyspread":   {"name": "하이일드 스프레드",          "unit": "%p", "source": "FRED",     **fetch_hy_spread()},
-        "bullbear":   {"name": "Bull-Bear Spread",   "unit": "%p", "source": "AAII",     **resolve("bullbear", fetch_bull_bear)},
-        "margindebt": {"name": "Margin Debt YoY",    "unit": "%",  "source": "FINRA",    **fetch_margin_debt()},
-        "putcall":    {"name": "Put/Call Ratio",      "unit": "",   "source": "CBOE",     **fetch_put_call()},
+        "wti":        {"name": "유가 (WTI)",       "unit": "USD","source": "yfinance", **fetch_wti()},
+        "vix":        {"name": "VIX 지수",         "unit": "",   "source": "yfinance", **fetch_vix()},
+        "move":       {"name": "MOVE 지수",        "unit": "",   "source": "yfinance", **fetch_move()},
+        "feargreed":  {"name": "공포탐욕지수 (CNN)","unit": "",   "source": "CNN",      **fetch_fear_greed()},
+        "hyspread":   {"name": "하이일드 스프레드","unit": "%p", "source": "FRED",     **fetch_hy_spread()},
+        "bullbear":   {"name": "Bull-Bear Spread", "unit": "%p", "source": "AAII",     **resolve("bullbear", fetch_bull_bear)},
+        "margindebt": {"name": "Margin Debt YoY", "unit": "%",  "source": "FINRA",    **fetch_margin_debt()},
+        "putcall":    {"name": "Put/Call Ratio",   "unit": "",   "source": "CBOE",     **fetch_put_call()},
     }
 
     result = {

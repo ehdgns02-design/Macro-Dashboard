@@ -75,29 +75,31 @@
     .btn-refresh:hover { color: var(--text); border-color: var(--border2); }
 
     /* ── 메인 ── */
-    .main { padding: 20px 24px 32px; max-width: 1120px; margin: 0 auto; }
+    .main { padding: 20px 24px 32px; max-width: 1200px; margin: 0 auto; }
     .section-label {
       font-size: 10px; font-weight: 600; letter-spacing: 0.1em;
       text-transform: uppercase; color: var(--text3);
-      margin: 20px 0 10px;
+      margin: 24px 0 10px;
     }
     .section-label:first-child { margin-top: 0; }
 
     /* ── 그리드 ── */
     .grid {
       display: grid;
-      grid-template-columns: repeat(5, 1fr);
+      grid-template-columns: repeat(6, 1fr);
       gap: 10px;
     }
-    @media (max-width: 900px) { .grid { grid-template-columns: repeat(3, 1fr); } }
-    @media (max-width: 600px) { .grid { grid-template-columns: repeat(2, 1fr); } }
+    .grid-5 { grid-template-columns: repeat(5, 1fr); }
+    .grid-2 { grid-template-columns: repeat(2, 1fr); }
+    @media (max-width: 1000px) { .grid { grid-template-columns: repeat(3, 1fr); } }
+    @media (max-width: 600px)  { .grid { grid-template-columns: repeat(2, 1fr); } }
 
     /* ── 카드 ── */
     .card {
       background: var(--bg2);
       border: 1px solid var(--border);
       border-radius: 12px;
-      padding: 14px 14px 12px 17px;
+      padding: 14px 14px 14px 17px;
       position: relative;
       overflow: hidden;
       transition: border-color 0.15s;
@@ -118,7 +120,7 @@
     }
     .card-name {
       font-size: 10.5px; color: var(--text2); font-weight: 500;
-      line-height: 1.4; max-width: 85px;
+      line-height: 1.4;
     }
     .signal {
       font-size: 9.5px; font-weight: 600;
@@ -131,22 +133,25 @@
     .sig-gray  { background: rgba(90,96,112,0.2); color: var(--text3); }
 
     .card-value {
-      font-size: 22px; font-weight: 600;
+      font-size: 24px; font-weight: 600;
       letter-spacing: -0.5px;
       color: var(--text); line-height: 1;
-      margin-bottom: 5px;
+      margin-bottom: 6px;
     }
     .card-unit { font-size: 13px; font-weight: 400; color: var(--text2); }
-    .card-sub  { font-size: 10.5px; color: var(--text2); margin-bottom: 10px; }
+    .card-sub  { font-size: 10px; color: var(--text2); margin-bottom: 4px; line-height: 1.5; }
+    .card-criteria {
+      font-size: 9.5px; color: var(--text3);
+      margin-top: 6px; padding-top: 6px;
+      border-top: 1px solid var(--border);
+      line-height: 1.5;
+    }
     .change-up   { color: var(--red);   font-weight: 600; }
     .change-down { color: var(--green); font-weight: 600; }
     .change-up-g { color: var(--green); font-weight: 600; }
 
-    /* ── 스파크라인 SVG ── */
-    .spark { display: block; width: 100%; height: 28px; }
-
     /* ── 게이지 ── */
-    .gauge-wrap { margin-top: 6px; }
+    .gauge-wrap { margin-top: 8px; }
     .gauge-track {
       height: 4px; border-radius: 2px;
       background: var(--bg3); overflow: hidden;
@@ -188,21 +193,44 @@
 
 <script>
 // ──────────────────────────────────────────────
-// 신호 판정 로직
+// 소수몽키 4강 기준 신호 판정
 // ──────────────────────────────────────────────
 const SIGNALS = {
-  sp500:      v => v === null ? 'gray' : 'green',   // 절대값 기준 신호 없음 → change_pct로 판단
+  sp500:      v => v === null ? 'gray' : 'green',
   nasdaq:     v => v === null ? 'gray' : 'green',
+  dow:        v => v === null ? 'gray' : 'green',
   tenyear:    v => v < 3.5 ? 'green' : v < 4.5 ? 'amber' : 'red',
   dxy:        v => v < 100 ? 'green' : v < 106 ? 'amber' : 'red',
   wti:        v => v < 70  ? 'green' : v < 90  ? 'amber' : 'red',
+  // 소수몽키: 20이하 안정, 20~30 고변동, 30이상 위기
   vix:        v => v < 20  ? 'green' : v < 30  ? 'amber' : 'red',
   move:       v => v < 100 ? 'green' : v < 130 ? 'amber' : 'red',
   feargreed:  v => v < 30  ? 'amber' : v < 65  ? 'green' : 'red',
-  hyspread:   v => v < 3   ? 'green' : v < 5   ? 'amber' : 'red',
-  bullbear:   v => v < -10 ? 'amber' : v < 20  ? 'green' : 'red',
-  margindebt: v => v === null ? 'gray' : v < 10 ? 'green' : v < 20 ? 'amber' : 'red',
-  putcall:    v => v > 1.1 ? 'amber' : v > 0.7 ? 'green' : 'red',
+  // 소수몽키: 5% = 1차위기(15-20%↓), 7% = 2차위기(20%↑↓)
+  hyspread:   v => v < 5   ? 'green' : v < 7   ? 'amber' : 'red',
+  // 소수몽키: -20이하 저점매수, 30이상 고점(참고용)
+  bullbear:   v => v < -20 ? 'amber' : v < 30  ? 'green' : 'red',
+  // 소수몽키: +40%이상 고점시그널, -20%이하 저점시그널
+  margindebt: v => v === null ? 'gray' : v >= 40 ? 'red' : v <= -20 ? 'amber' : 'green',
+  // 소수몽키: 1.0이상 저점확률↑, 0.5이하 단기고점
+  putcall:    v => v >= 1.0 ? 'amber' : v <= 0.5 ? 'red' : 'green',
+};
+
+// ── 카드 하단 판단기준 텍스트 (소수몽키 4강) ──
+const CRITERIA = {
+  sp500:      '',
+  nasdaq:     '',
+  dow:        '',
+  tenyear:    '4.5%↑ 위험 · 3.5%↓ 안정',
+  dxy:        '106↑ 위험 · 100↓ 안정',
+  wti:        '90↑ 위험 · 70↓ 안정',
+  vix:        '20↓ 안정 · 20~30 고변동 · 30↑ 위기',
+  move:       '100↓ 안정 · 130↑ 위험',
+  feargreed:  '30↓ 공포(매수구간) · 65↑ 탐욕(과열)',
+  hyspread:   '5%↑ 1차위기(15~20%↓) · 7%↑ 2차위기(20%↑↓)',
+  bullbear:   '-20↓ 저점 1차매수 · -30↓ 2차매수 · 30↑ 고점(참고)',
+  margindebt: '+40%↑ 고점시그널(매도준비) · -20%↓ 저점시그널(매수준비)',
+  putcall:    '1.0↑ 저점가능(1년 1~2회) · 1.5↑ 바닥 · 0.5↓ 단기고점',
 };
 
 const SIGNAL_LABELS = {
@@ -223,26 +251,6 @@ function getSignal(key, value) {
 }
 
 // ──────────────────────────────────────────────
-// SVG 스파크라인
-// ──────────────────────────────────────────────
-function sparkline(history, color) {
-  if (!history || history.length < 2) return '';
-  const W = 120, H = 28, pad = 2;
-  const min = Math.min(...history);
-  const max = Math.max(...history);
-  const range = max - min || 1;
-  const pts = history.map((v, i) => {
-    const x = pad + (i / (history.length - 1)) * (W - pad * 2);
-    const y = H - pad - ((v - min) / range) * (H - pad * 2);
-    return `${x.toFixed(1)},${y.toFixed(1)}`;
-  });
-  return `<svg class="spark" viewBox="0 0 ${W} ${H}" preserveAspectRatio="none">
-    <polyline points="${pts.join(' ')}"
-      fill="none" stroke="${color}" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round"/>
-  </svg>`;
-}
-
-// ──────────────────────────────────────────────
 // 변화량 포맷
 // ──────────────────────────────────────────────
 function fmtChange(key, ind) {
@@ -250,21 +258,23 @@ function fmtChange(key, ind) {
   if (v === null || v === undefined) return '<span class="na">—</span>';
   const sign = v >= 0 ? '▲' : '▼';
   const cls = changeClass(key, v);
-  const abs = Math.abs(v).toFixed(key === 'feargreed' ? 1 : key === 'tenyear' || key === 'hyspread' ? 2 : 2);
+  const abs = Math.abs(v).toFixed(
+    key === 'feargreed' ? 1 :
+    key === 'tenyear' || key === 'hyspread' ? 2 : 2
+  );
   const pct = (ind.change_pct !== undefined && ind.change_pct !== 0)
     ? ` (${v >= 0 ? '+' : ''}${ind.change_pct.toFixed(1)}%)` : '';
   return `<span class="${cls}">${sign} ${abs}${pct}</span>`;
 }
 
-// 지표별로 up/down 색 방향이 다름
-const UP_IS_BAD = new Set(['tenyear','dxy','vix','move','hyspread','margindebt']);
-const UP_IS_GOOD = new Set(['sp500','nasdaq','wti']);
+const UP_IS_BAD  = new Set(['tenyear','dxy','vix','move','hyspread','margindebt']);
+const UP_IS_GOOD = new Set(['sp500','nasdaq','dow','wti']);
 const UP_NEUTRAL = new Set(['feargreed','bullbear','putcall']);
 
 function changeClass(key, v) {
   if (v === 0) return '';
   if (UP_NEUTRAL.has(key)) return '';
-  if (UP_IS_BAD.has(key)) return v > 0 ? 'change-up' : 'change-down';
+  if (UP_IS_BAD.has(key))  return v > 0 ? 'change-up' : 'change-down';
   if (UP_IS_GOOD.has(key)) return v > 0 ? 'change-up-g' : 'change-up';
   return v > 0 ? 'change-up-g' : 'change-up';
 }
@@ -275,11 +285,10 @@ function changeClass(key, v) {
 function fmtValue(key, ind) {
   const v = ind.value;
   if (v === null || v === undefined) return '<span class="na">N/A</span>';
-  const unit = ind.unit || '';
-  const prefix = key === 'wti' ? '$' : '';
 
-  if (key === 'sp500')      return `${v.toLocaleString('en-US', {maximumFractionDigits:0})}`;
-  if (key === 'nasdaq')     return `${v.toLocaleString('en-US', {maximumFractionDigits:0})}`;
+  if (key === 'sp500')      return v.toLocaleString('en-US', {maximumFractionDigits:0});
+  if (key === 'nasdaq')     return v.toLocaleString('en-US', {maximumFractionDigits:0});
+  if (key === 'dow')        return v.toLocaleString('en-US', {maximumFractionDigits:0});
   if (key === 'tenyear')    return `${v.toFixed(2)}<span class="card-unit">%</span>`;
   if (key === 'dxy')        return `${v.toFixed(1)}`;
   if (key === 'wti')        return `<span style="font-size:14px;color:var(--text2)">$</span>${v.toFixed(1)}`;
@@ -288,8 +297,11 @@ function fmtValue(key, ind) {
   if (key === 'feargreed')  return `${Math.round(v)}`;
   if (key === 'hyspread')   return `${v.toFixed(2)}<span class="card-unit">%p</span>`;
   if (key === 'bullbear')   return `${v >= 0 ? '+' : ''}${v.toFixed(1)}<span class="card-unit">%p</span>`;
-  if (key === 'margindebt') { const yoy = ind.yoy !== undefined ? ind.yoy : v; return `${yoy >= 0 ? '+' : ''}${yoy.toFixed(1)}<span class="card-unit">%</span>`; }
-  if (key === 'putcall')    return `${v.toFixed(2)}`;
+  if (key === 'margindebt') {
+    const yoy = ind.yoy !== undefined ? ind.yoy : v;
+    return `${yoy >= 0 ? '+' : ''}${yoy.toFixed(1)}<span class="card-unit">%</span>`;
+  }
+  if (key === 'putcall') return `${v.toFixed(2)}`;
   return `${v}`;
 }
 
@@ -297,22 +309,20 @@ function fmtValue(key, ind) {
 // 카드 서브 텍스트
 // ──────────────────────────────────────────────
 function fmtSub(key, ind) {
-  if (key === 'sp500')     return '전일 대비';
-  if (key === 'nasdaq')    return '전일 대비';
   if (key === 'feargreed') return ind.rating ? `${ind.rating} · 0=공포 100=탐욕` : '';
   if (key === 'bullbear') {
     const b = ind.bull, be = ind.bear;
     return (b && be) ? `Bull ${b}% / Bear ${be}% · AAII 주간` : 'AAII 주간';
   }
-  if (key === 'margindebt') return `YoY 변화율 · 월간 (FINRA)`;
-  if (key === 'putcall') return '0.7↓ 과열 · 1.2↑ 공포 · CBOE';
-  if (key === 'move') return '채권시장 VIX';
-  if (key === 'hyspread') return `ICE BofA HY · FRED${ind.date ? ' · ' + ind.date : ''}`;
+  if (key === 'margindebt') return `YoY 변화율 · 분기 (FRED/FINRA)`;
+  if (key === 'putcall')    return ind.manual ? '수동 입력값 · 클릭하여 수정' : 'CBOE Equity P/C';
+  if (key === 'move')       return '채권시장 VIX';
+  if (key === 'hyspread')   return `ICE BofA HY · FRED${ind.date ? ' · ' + ind.date : ''}`;
   return '';
 }
 
 // ──────────────────────────────────────────────
-// 게이지
+// 게이지 (fear&greed, bullbear만 유지)
 // ──────────────────────────────────────────────
 function renderGauge(key, ind, sigColor) {
   const colorMap = { green: 'var(--green)', amber: 'var(--amber)', red: 'var(--red)', gray: 'var(--text3)' };
@@ -327,26 +337,27 @@ function renderGauge(key, ind, sigColor) {
       <div class="gauge-labels"><span>공포 0</span><span>탐욕 100</span></div>
     </div>`;
   }
-  if (key === 'putcall') {
-    // 0.5~1.5 범위를 0~100%로 매핑
-    const pct = Math.min(100, Math.max(0, ((ind.value || 0.7) - 0.5) / 1.0 * 100));
-    return `<div class="gauge-wrap">
-      <div class="gauge-track">
-        <div class="gauge-fill" style="width:${pct}%;background:${c}"></div>
-      </div>
-      <div class="gauge-labels"><span>과열 ↓0.7</span><span>공포 ↑1.2</span></div>
-    </div>`;
-  }
   if (key === 'bullbear') {
+    // -40 ~ +40 범위를 0~100%로 매핑
     const pct = Math.min(100, Math.max(0, ((ind.value || 0) + 40) / 80 * 100));
     return `<div class="gauge-wrap">
       <div class="gauge-track">
         <div class="gauge-fill" style="width:${pct}%;background:${c}"></div>
       </div>
-      <div class="gauge-labels"><span>약세</span><span>강세</span></div>
+      <div class="gauge-labels"><span>약세 -40</span><span>강세 +40</span></div>
     </div>`;
   }
-  return sparkline(ind.history, c);
+  if (key === 'putcall') {
+    // 0.3~1.7 범위를 0~100%로 매핑
+    const pct = Math.min(100, Math.max(0, ((ind.value || 0.7) - 0.3) / 1.4 * 100));
+    return `<div class="gauge-wrap">
+      <div class="gauge-track">
+        <div class="gauge-fill" style="width:${pct}%;background:${c}"></div>
+      </div>
+      <div class="gauge-labels"><span>저점↑1.0</span><span>고점↓0.5</span></div>
+    </div>`;
+  }
+  return '';
 }
 
 // ──────────────────────────────────────────────
@@ -362,7 +373,7 @@ function setPCManual(v) {
 function editPutCall() {
   const cur = getPCManual();
   const input = prompt('Put/Call Ratio 값 직접 입력 (예: 0.62)\nCBOE Equity P/C 기준', cur !== null ? cur : '');
-  if (input === null) return; // 취소
+  if (input === null) return;
   const val = parseFloat(input);
   if (isNaN(val) || val <= 0) { alert('올바른 숫자를 입력해주세요.'); return; }
   setPCManual(val);
@@ -375,7 +386,6 @@ function editPutCall() {
 const GAUGE_KEYS = new Set(['feargreed','putcall','bullbear']);
 
 function renderCard(key, ind) {
-  // Put/Call: 수동 입력값 우선 적용
   if (key === 'putcall') {
     const manual = getPCManual();
     if (manual !== null) {
@@ -383,18 +393,21 @@ function renderCard(key, ind) {
     }
   }
 
-  const sig = getSignal(key, ind.yoy !== undefined ? ind.yoy : ind.value);
+  const sigVal = (key === 'margindebt' && ind.yoy !== undefined) ? ind.yoy : ind.value;
+  const sig = getSignal(key, sigVal);
   const [sigCls, accCls] = SIGNAL_CLASSES[sig].split(' ');
-  const colorMap = { green: 'var(--green)', amber: 'var(--amber)', red: 'var(--red)', gray: 'var(--text3)' };
-  const sparkColor = colorMap[sig];
   const sub = fmtSub(key, ind);
-  const useGauge = GAUGE_KEYS.has(key);
+  const criteria = CRITERIA[key] || '';
 
   const errorBadge = (!ind.ok && ind.value === null)
     ? '<span class="error-badge">수집오류</span>' : '';
 
   const editBtn = (key === 'putcall')
     ? `<span onclick="editPutCall()" title="직접 입력" style="cursor:pointer;font-size:11px;color:var(--text3);margin-left:4px">✏️</span>` : '';
+
+  const changeRow = (key === 'putcall' && ind.manual)
+    ? `<div class="card-sub">수동 입력값 · 클릭하여 수정</div>`
+    : `<div class="card-sub">${fmtChange(key, ind)} 전일 대비</div>`;
 
   return `
   <div class="card" ${key === 'putcall' ? 'onclick="editPutCall()" style="cursor:pointer"' : ''}>
@@ -405,11 +418,9 @@ function renderCard(key, ind) {
     </div>
     <div class="card-value">${fmtValue(key, ind)}${editBtn}</div>
     ${sub ? `<div class="card-sub">${sub}</div>` : ''}
-    <div class="card-sub">${ind.manual ? '수동 입력값 · 클릭하여 수정' : fmtChange(key, ind) + ' 전일 대비'}</div>
-    ${useGauge
-      ? renderGauge(key, ind, sig)
-      : sparkline(ind.history, sparkColor)
-    }
+    ${changeRow}
+    ${GAUGE_KEYS.has(key) ? renderGauge(key, ind, sig) : ''}
+    ${criteria ? `<div class="card-criteria">${criteria}</div>` : ''}
   </div>`;
 }
 
@@ -417,17 +428,12 @@ function renderCard(key, ind) {
 // 전체 렌더
 // ──────────────────────────────────────────────
 const GROUPS = [
-  { label: '시장 지수 · 금리 · 환율 · 원자재', keys: ['sp500','nasdaq','tenyear','dxy','wti'] },
-  { label: '변동성 · 심리 · 포지션',           keys: ['vix','move','feargreed','putcall','bullbear'] },
+  { label: '시장 지수 · 금리 · 환율 · 원자재', keys: ['sp500','nasdaq','dow','tenyear','dxy','wti'], cols: 6 },
+  { label: '변동성 · 심리 · 포지션',           keys: ['vix','move','feargreed','putcall','bullbear'], cols: 5 },
   { label: '신용 · 레버리지',                  keys: ['hyspread','margindebt'], cols: 2 },
 ];
 
 function render(data) {
-  const sources = {
-    yfinance: '^TNX · DX-Y.NYB · CL=F · ^VIX · ^MOVE',
-    '': 'CNN Fear&amp;Greed · FRED (BAMLH0A0HYM2) · AAII · FINRA · CBOE',
-  };
-
   let html = `
   <div class="header">
     <div class="header-left">
@@ -443,8 +449,7 @@ function render(data) {
 
   for (const group of GROUPS) {
     html += `<div class="section-label">${group.label}</div>`;
-    const colStyle = group.cols ? `style="grid-template-columns:repeat(${group.cols},1fr)"` : '';
-    html += `<div class="grid" ${colStyle}>`;
+    html += `<div class="grid" style="grid-template-columns:repeat(${group.cols},1fr)">`;
     for (const key of group.keys) {
       const ind = data.indicators[key];
       if (!ind) continue;
@@ -456,7 +461,7 @@ function render(data) {
   html += `</div>
   <div class="footer">
     <p>데이터 소스: yfinance · CNN · FRED · AAII · FINRA · CBOE<br>
-       GitHub Actions 자동 업데이트 · 매일 06:00 KST</p>
+       GitHub Actions 자동 업데이트 · 매일 06:00 KST · 판단기준: 소수몽키 마스터클래스 4강</p>
     <p style="text-align:right">마지막 업데이트<br><strong style="color:var(--text)">${data.updated_at}</strong></p>
   </div>`;
 
