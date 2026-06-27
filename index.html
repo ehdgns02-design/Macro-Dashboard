@@ -191,16 +191,18 @@
 // 신호 판정 로직
 // ──────────────────────────────────────────────
 const SIGNALS = {
+  sp500:      v => v === null ? 'gray' : 'green',   // 절대값 기준 신호 없음 → change_pct로 판단
+  nasdaq:     v => v === null ? 'gray' : 'green',
   tenyear:    v => v < 3.5 ? 'green' : v < 4.5 ? 'amber' : 'red',
   dxy:        v => v < 100 ? 'green' : v < 106 ? 'amber' : 'red',
   wti:        v => v < 70  ? 'green' : v < 90  ? 'amber' : 'red',
   vix:        v => v < 20  ? 'green' : v < 30  ? 'amber' : 'red',
   move:       v => v < 100 ? 'green' : v < 130 ? 'amber' : 'red',
-  feargreed:  v => v < 30  ? 'amber' : v < 65  ? 'green' : 'red',   // 극도공포=amber, 중립=green, 탐욕=red
+  feargreed:  v => v < 30  ? 'amber' : v < 65  ? 'green' : 'red',
   hyspread:   v => v < 3   ? 'green' : v < 5   ? 'amber' : 'red',
-  bullbear:   v => v < -10 ? 'amber' : v < 20  ? 'green' : 'red',   // 과도낙관=red
+  bullbear:   v => v < -10 ? 'amber' : v < 20  ? 'green' : 'red',
   margindebt: v => v === null ? 'gray' : v < 10 ? 'green' : v < 20 ? 'amber' : 'red',
-  putcall:    v => v > 1.1 ? 'amber' : v > 0.7 ? 'green' : 'red',   // 낮으면 과열
+  putcall:    v => v > 1.1 ? 'amber' : v > 0.7 ? 'green' : 'red',
 };
 
 const SIGNAL_LABELS = {
@@ -256,13 +258,15 @@ function fmtChange(key, ind) {
 
 // 지표별로 up/down 색 방향이 다름
 const UP_IS_BAD = new Set(['tenyear','dxy','vix','move','hyspread','margindebt']);
+const UP_IS_GOOD = new Set(['sp500','nasdaq','wti']);
 const UP_NEUTRAL = new Set(['feargreed','bullbear','putcall']);
 
 function changeClass(key, v) {
   if (v === 0) return '';
   if (UP_NEUTRAL.has(key)) return '';
   if (UP_IS_BAD.has(key)) return v > 0 ? 'change-up' : 'change-down';
-  return v > 0 ? 'change-up-g' : 'change-up';   // wti: up = 애매하나 일단 green
+  if (UP_IS_GOOD.has(key)) return v > 0 ? 'change-up-g' : 'change-up';
+  return v > 0 ? 'change-up-g' : 'change-up';
 }
 
 // ──────────────────────────────────────────────
@@ -274,6 +278,8 @@ function fmtValue(key, ind) {
   const unit = ind.unit || '';
   const prefix = key === 'wti' ? '$' : '';
 
+  if (key === 'sp500')      return `${v.toLocaleString('en-US', {maximumFractionDigits:0})}`;
+  if (key === 'nasdaq')     return `${v.toLocaleString('en-US', {maximumFractionDigits:0})}`;
   if (key === 'tenyear')    return `${v.toFixed(2)}<span class="card-unit">%</span>`;
   if (key === 'dxy')        return `${v.toFixed(1)}`;
   if (key === 'wti')        return `<span style="font-size:14px;color:var(--text2)">$</span>${v.toFixed(1)}`;
@@ -291,6 +297,8 @@ function fmtValue(key, ind) {
 // 카드 서브 텍스트
 // ──────────────────────────────────────────────
 function fmtSub(key, ind) {
+  if (key === 'sp500')     return '전일 대비';
+  if (key === 'nasdaq')    return '전일 대비';
   if (key === 'feargreed') return ind.rating ? `${ind.rating} · 0=공포 100=탐욕` : '';
   if (key === 'bullbear') {
     const b = ind.bull, be = ind.bear;
@@ -409,8 +417,9 @@ function renderCard(key, ind) {
 // 전체 렌더
 // ──────────────────────────────────────────────
 const GROUPS = [
-  { label: '금리 · 환율 · 원자재 · 변동성', keys: ['tenyear','dxy','wti','vix','move'] },
-  { label: '심리 · 신용 · 포지션',          keys: ['feargreed','hyspread','bullbear','margindebt','putcall'] },
+  { label: '시장 지수 · 금리 · 환율 · 원자재', keys: ['sp500','nasdaq','tenyear','dxy','wti'] },
+  { label: '변동성 · 심리 · 포지션',           keys: ['vix','move','feargreed','putcall','bullbear'] },
+  { label: '신용 · 레버리지',                  keys: ['hyspread','margindebt'], cols: 2 },
 ];
 
 function render(data) {
@@ -434,9 +443,12 @@ function render(data) {
 
   for (const group of GROUPS) {
     html += `<div class="section-label">${group.label}</div>`;
-    html += `<div class="grid">`;
+    const colStyle = group.cols ? `style="grid-template-columns:repeat(${group.cols},1fr)"` : '';
+    html += `<div class="grid" ${colStyle}>`;
     for (const key of group.keys) {
-      html += renderCard(key, data.indicators[key]);
+      const ind = data.indicators[key];
+      if (!ind) continue;
+      html += renderCard(key, ind);
     }
     html += `</div>`;
   }

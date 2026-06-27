@@ -86,6 +86,14 @@ def fetch_move():
     return get_yf("^MOVE")
 
 
+def fetch_sp500():
+    return get_yf("^GSPC")
+
+
+def fetch_nasdaq():
+    return get_yf("^IXIC")
+
+
 # ──────────────────────────────────────────────
 # 6. CNN Fear & Greed
 # ──────────────────────────────────────────────
