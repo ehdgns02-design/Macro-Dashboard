@@ -4,481 +4,609 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>매크로 지표 대시보드</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
     :root {
-      --bg: #0f1117;
-      --bg2: #1a1d27;
-      --bg3: #22263a;
-      --border: rgba(255,255,255,0.08);
-      --border2: rgba(255,255,255,0.14);
-      --text: #e8eaf0;
-      --text2: #8b92a8;
-      --text3: #5a6070;
-      --green: #00d4aa;
-      --green-bg: rgba(0,212,170,0.1);
-      --red: #ff6b6b;
-      --red-bg: rgba(255,107,107,0.1);
-      --amber: #ffaa00;
-      --amber-bg: rgba(255,170,0,0.1);
-      --blue: #4a9eff;
-      --accent: #6c7bff;
+      --bg:        #0b0e1a;
+      --bg2:       #111525;
+      --bg3:       #1a1f35;
+      --bg4:       #202540;
+      --border:    rgba(255,255,255,0.06);
+      --border2:   rgba(255,255,255,0.12);
+      --text:      #f0f2f8;
+      --text2:     #8892aa;
+      --text3:     #4a5270;
+      --green:     #10d9a0;
+      --green-dim: rgba(16,217,160,0.12);
+      --green-glow:rgba(16,217,160,0.06);
+      --red:       #f05c6e;
+      --red-dim:   rgba(240,92,110,0.12);
+      --amber:     #f5a623;
+      --amber-dim: rgba(245,166,35,0.12);
+      --blue:      #5b8def;
+      --blue-dim:  rgba(91,141,239,0.12);
+      --gray-dim:  rgba(74,82,112,0.15);
     }
+
     * { box-sizing: border-box; margin: 0; padding: 0; }
+
     body {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Inter', sans-serif;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
       background: var(--bg);
       color: var(--text);
       min-height: 100vh;
+      -webkit-font-smoothing: antialiased;
     }
 
-    /* ── 헤더 ── */
+    /* ── HEADER ── */
     .header {
+      position: sticky; top: 0; z-index: 100;
+      background: rgba(11,14,26,0.92);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
       border-bottom: 1px solid var(--border);
-      padding: 18px 24px 16px;
+      padding: 0 28px;
+      height: 56px;
       display: flex;
-      justify-content: space-between;
       align-items: center;
-      gap: 12px;
-      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 16px;
     }
-    .header-left h1 {
-      font-size: 17px;
-      font-weight: 600;
-      letter-spacing: -0.3px;
+    .header-brand {
+      display: flex; align-items: center; gap: 10px;
+    }
+    .header-brand .logo {
+      font-size: 14px; font-weight: 700; letter-spacing: -0.3px;
       color: var(--text);
     }
-    .header-left p {
-      font-size: 12px;
-      color: var(--text2);
-      margin-top: 3px;
+    .header-brand .logo span { color: var(--green); }
+    .header-brand .divider {
+      width: 1px; height: 16px; background: var(--border2);
     }
-    .header-right { display: flex; align-items: center; gap: 10px; }
-    .badge-live {
-      display: inline-flex; align-items: center; gap: 6px;
-      font-size: 11px; font-weight: 500; color: var(--green);
-      background: var(--green-bg);
-      padding: 4px 10px; border-radius: 20px;
-      border: 1px solid rgba(0,212,170,0.2);
+    .header-brand .subtitle {
+      font-size: 11.5px; color: var(--text3); font-weight: 400;
+    }
+    .header-right {
+      display: flex; align-items: center; gap: 10px;
+    }
+    .update-time {
+      font-size: 11px; color: var(--text3);
+    }
+    .live-dot {
+      display: inline-flex; align-items: center; gap: 5px;
+      font-size: 10.5px; font-weight: 500; color: var(--green);
     }
     .dot {
-      width: 6px; height: 6px; border-radius: 50%;
+      width: 5px; height: 5px; border-radius: 50%;
       background: var(--green);
-      animation: pulse 2s infinite;
+      box-shadow: 0 0 6px var(--green);
+      animation: pulse 2.4s ease-in-out infinite;
     }
-    @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
+    @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.25} }
+
     .btn-refresh {
-      font-size: 12px; color: var(--text2);
-      background: var(--bg3); border: 1px solid var(--border2);
-      padding: 5px 12px; border-radius: 8px; cursor: pointer;
-      transition: all 0.15s;
+      display: inline-flex; align-items: center; gap: 5px;
+      font-size: 11.5px; font-weight: 500; color: var(--text2);
+      background: var(--bg3);
+      border: 1px solid var(--border2);
+      padding: 5px 12px; border-radius: 6px;
+      cursor: pointer; transition: all 0.15s; letter-spacing: 0;
+      font-family: inherit;
     }
-    .btn-refresh:hover { color: var(--text); border-color: var(--border2); }
+    .btn-refresh:hover { color: var(--text); background: var(--bg4); }
 
-    /* ── 메인 ── */
-    .main { padding: 20px 24px 32px; max-width: 1200px; margin: 0 auto; }
-    .section-label {
-      font-size: 10px; font-weight: 600; letter-spacing: 0.1em;
-      text-transform: uppercase; color: var(--text3);
-      margin: 24px 0 10px;
+    /* ── MAIN ── */
+    .main {
+      padding: 28px 28px 48px;
+      max-width: 1260px;
+      margin: 0 auto;
     }
-    .section-label:first-child { margin-top: 0; }
 
-    /* ── 그리드 ── */
+    /* ── SECTION ── */
+    .section { margin-bottom: 32px; }
+    .section-header {
+      display: flex; align-items: center; gap: 10px;
+      margin-bottom: 12px;
+    }
+    .section-title {
+      font-size: 10px; font-weight: 600;
+      letter-spacing: 0.12em; text-transform: uppercase;
+      color: var(--text3);
+    }
+    .section-line {
+      flex: 1; height: 1px; background: var(--border);
+    }
+
+    /* ── GRID ── */
     .grid {
       display: grid;
-      grid-template-columns: repeat(6, 1fr);
-      gap: 10px;
+      gap: 8px;
     }
-    .grid-5 { grid-template-columns: repeat(5, 1fr); }
-    .grid-2 { grid-template-columns: repeat(2, 1fr); }
-    @media (max-width: 1000px) { .grid { grid-template-columns: repeat(3, 1fr); } }
-    @media (max-width: 600px)  { .grid { grid-template-columns: repeat(2, 1fr); } }
 
-    /* ── 카드 ── */
+    /* ── CARD ── */
     .card {
       background: var(--bg2);
       border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 14px 14px 14px 17px;
+      border-radius: 10px;
+      padding: 16px 16px 14px;
       position: relative;
+      transition: border-color 0.2s, background 0.2s;
       overflow: hidden;
-      transition: border-color 0.15s;
     }
-    .card:hover { border-color: var(--border2); }
-    .card-accent {
-      position: absolute; left: 0; top: 0; bottom: 0;
-      width: 3px; border-radius: 12px 0 0 12px;
+    .card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+      border-radius: 10px 10px 0 0;
+      opacity: 0.7;
     }
-    .acc-green { background: var(--green); }
-    .acc-amber { background: var(--amber); }
-    .acc-red   { background: var(--red); }
-    .acc-gray  { background: var(--text3); }
+    .card.sig-green::before { background: var(--green); }
+    .card.sig-amber::before { background: var(--amber); }
+    .card.sig-red::before   { background: var(--red); }
+    .card.sig-gray::before  { background: var(--text3); opacity: 0.3; }
+    .card.sig-blue::before  { background: var(--blue); }
 
+    .card:hover {
+      border-color: var(--border2);
+      background: var(--bg3);
+    }
+    .card.clickable { cursor: pointer; }
+
+    /* Card top row */
     .card-top {
       display: flex; justify-content: space-between;
-      align-items: flex-start; margin-bottom: 8px;
+      align-items: flex-start;
+      margin-bottom: 10px;
     }
     .card-name {
-      font-size: 10.5px; color: var(--text2); font-weight: 500;
+      font-size: 10.5px; font-weight: 500;
+      color: var(--text2);
       line-height: 1.4;
     }
-    .signal {
-      font-size: 9.5px; font-weight: 600;
-      padding: 2px 7px; border-radius: 20px;
+
+    /* Signal badge */
+    .badge {
+      font-size: 9px; font-weight: 600;
+      padding: 2px 7px; border-radius: 4px;
+      letter-spacing: 0.03em;
       white-space: nowrap; flex-shrink: 0;
     }
-    .sig-green { background: var(--green-bg); color: var(--green); }
-    .sig-amber { background: var(--amber-bg); color: var(--amber); }
-    .sig-red   { background: var(--red-bg);   color: var(--red);   }
-    .sig-gray  { background: rgba(90,96,112,0.2); color: var(--text3); }
+    .badge-green { background: var(--green-dim); color: var(--green); }
+    .badge-amber { background: var(--amber-dim); color: var(--amber); }
+    .badge-red   { background: var(--red-dim);   color: var(--red);   }
+    .badge-gray  { background: var(--gray-dim);  color: var(--text3); }
+    .badge-blue  { background: var(--blue-dim);  color: var(--blue);  }
 
+    /* Value */
     .card-value {
-      font-size: 24px; font-weight: 600;
-      letter-spacing: -0.5px;
-      color: var(--text); line-height: 1;
-      margin-bottom: 6px;
+      font-size: 26px; font-weight: 700;
+      letter-spacing: -0.8px;
+      color: var(--text);
+      line-height: 1;
+      margin-bottom: 5px;
+      font-variant-numeric: tabular-nums;
     }
-    .card-unit { font-size: 13px; font-weight: 400; color: var(--text2); }
-    .card-sub  { font-size: 10px; color: var(--text2); margin-bottom: 4px; line-height: 1.5; }
-    .card-criteria {
-      font-size: 9.5px; color: var(--text3);
-      margin-top: 6px; padding-top: 6px;
-      border-top: 1px solid var(--border);
-      line-height: 1.5;
+    .card-value .unit {
+      font-size: 14px; font-weight: 500;
+      color: var(--text3); letter-spacing: 0;
     }
-    .change-up   { color: var(--red);   font-weight: 600; }
-    .change-down { color: var(--green); font-weight: 600; }
-    .change-up-g { color: var(--green); font-weight: 600; }
+    .card-value .prefix {
+      font-size: 15px; font-weight: 500;
+      color: var(--text3); margin-right: 1px;
+    }
+    .na { color: var(--text3); font-size: 18px; font-weight: 400; }
 
-    /* ── 게이지 ── */
-    .gauge-wrap { margin-top: 8px; }
-    .gauge-track {
-      height: 4px; border-radius: 2px;
-      background: var(--bg3); overflow: hidden;
+    /* Change row */
+    .card-change {
+      font-size: 10.5px;
+      display: flex; align-items: center; gap: 6px;
+      margin-bottom: 3px;
+      font-variant-numeric: tabular-nums;
     }
-    .gauge-fill { height: 100%; border-radius: 2px; transition: width 0.6s ease; }
+    .up-bad   { color: var(--red); }
+    .down-bad { color: var(--green); }
+    .up-good  { color: var(--green); }
+    .down-good{ color: var(--red); }
+    .neutral  { color: var(--text3); }
+
+    /* Sub info */
+    .card-info {
+      font-size: 9.5px; color: var(--text3);
+      line-height: 1.5; margin-top: 2px;
+    }
+
+    /* Criteria */
+    .card-criteria {
+      margin-top: 10px;
+      padding-top: 8px;
+      border-top: 1px solid var(--border);
+      font-size: 9px; color: var(--text3);
+      line-height: 1.6;
+    }
+
+    /* ── GAUGE ── */
+    .gauge { margin-top: 10px; }
+    .gauge-track {
+      height: 3px; border-radius: 2px;
+      background: var(--bg4);
+      overflow: hidden;
+    }
+    .gauge-fill {
+      height: 100%; border-radius: 2px;
+      transition: width 0.7s cubic-bezier(.4,0,.2,1);
+    }
     .gauge-labels {
       display: flex; justify-content: space-between;
-      margin-top: 3px;
+      margin-top: 4px;
     }
-    .gauge-labels span { font-size: 9px; color: var(--text3); }
+    .gauge-labels span { font-size: 8.5px; color: var(--text3); }
 
-    /* ── 푸터 ── */
+    /* ── EDIT ICON ── */
+    .edit-icon {
+      display: inline-flex; align-items: center;
+      font-size: 11px; color: var(--text3);
+      margin-left: 5px; cursor: pointer;
+      vertical-align: middle;
+    }
+
+    /* ── FOOTER ── */
     .footer {
       border-top: 1px solid var(--border);
-      padding: 14px 24px;
+      padding: 16px 28px;
       display: flex; justify-content: space-between;
       align-items: center; flex-wrap: wrap; gap: 8px;
     }
-    .footer p { font-size: 10.5px; color: var(--text3); line-height: 1.6; }
+    .footer p {
+      font-size: 10px; color: var(--text3); line-height: 1.7;
+    }
+    .footer strong { color: var(--text2); }
 
-    /* ── 로딩 / 에러 ── */
+    /* ── LOADING ── */
     .loading {
-      text-align: center; padding: 80px 20px;
-      color: var(--text2); font-size: 14px;
+      text-align: center; padding: 100px 20px;
+      color: var(--text2); font-size: 13px;
     }
-    .error-badge {
-      display: inline-block; font-size: 9px;
-      background: var(--red-bg); color: var(--red);
-      padding: 1px 5px; border-radius: 6px; margin-left: 4px;
+    .err-badge {
+      display: inline-block; font-size: 8.5px;
+      background: var(--red-dim); color: var(--red);
+      padding: 1px 5px; border-radius: 3px; margin-left: 3px;
     }
-    .na { color: var(--text3); font-size: 16px; }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 900px) {
+      .grid { grid-template-columns: repeat(3,1fr) !important; }
+    }
+    @media (max-width: 580px) {
+      .grid { grid-template-columns: repeat(2,1fr) !important; }
+      .main { padding: 16px 14px 40px; }
+      .header { padding: 0 16px; }
+    }
   </style>
 </head>
 <body>
 
 <div id="app">
-  <div class="loading">데이터 로딩 중...</div>
+  <div class="loading">데이터 로딩 중…</div>
 </div>
 
 <script>
-// ──────────────────────────────────────────────
-// 소수몽키 4강 기준 신호 판정
-// ──────────────────────────────────────────────
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+// 소수몽키 4강 기반 신호 임계값
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 const SIGNALS = {
-  sp500:      v => v === null ? 'gray' : 'green',
-  nasdaq:     v => v === null ? 'gray' : 'green',
-  dow:        v => v === null ? 'gray' : 'green',
-  tenyear:    v => v < 3.5 ? 'green' : v < 4.5 ? 'amber' : 'red',
-  dxy:        v => v < 100 ? 'green' : v < 106 ? 'amber' : 'red',
-  wti:        v => v < 70  ? 'green' : v < 90  ? 'amber' : 'red',
-  // 소수몽키: 20이하 안정, 20~30 고변동, 30이상 위기
-  vix:        v => v < 20  ? 'green' : v < 30  ? 'amber' : 'red',
-  move:       v => v < 100 ? 'green' : v < 130 ? 'amber' : 'red',
-  feargreed:  v => v < 30  ? 'amber' : v < 65  ? 'green' : 'red',
-  // 소수몽키: 5% = 1차위기(15-20%↓), 7% = 2차위기(20%↑↓)
-  hyspread:   v => v < 5   ? 'green' : v < 7   ? 'amber' : 'red',
-  // 소수몽키: -20이하 저점매수, 30이상 고점(참고용)
-  bullbear:   v => v < -20 ? 'amber' : v < 30  ? 'green' : 'red',
-  // 소수몽키: +40%이상 고점시그널, -20%이하 저점시그널
-  margindebt: v => v === null ? 'gray' : v >= 40 ? 'red' : v <= -20 ? 'amber' : 'green',
-  // 소수몽키: 1.0이상 저점확률↑, 0.5이하 단기고점
-  putcall:    v => v >= 1.0 ? 'amber' : v <= 0.5 ? 'red' : 'green',
+  sp500:      v => v == null ? 'gray' : 'blue',
+  nasdaq:     v => v == null ? 'gray' : 'blue',
+  dow:        v => v == null ? 'gray' : 'blue',
+  tenyear:    v => v < 3.5  ? 'green' : v < 4.5  ? 'amber' : 'red',
+  dxy:        v => v < 100  ? 'green' : v < 106  ? 'amber' : 'red',
+  wti:        v => v < 70   ? 'green' : v < 90   ? 'amber' : 'red',
+  vix:        v => v < 20   ? 'green' : v < 30   ? 'amber' : 'red',
+  move:       v => v < 100  ? 'green' : v < 130  ? 'amber' : 'red',
+  feargreed:  v => v < 30   ? 'amber' : v < 65   ? 'green' : 'red',
+  hyspread:   v => v < 5    ? 'green' : v < 7    ? 'amber' : 'red',
+  bullbear:   v => v < -20  ? 'amber' : v < 30   ? 'green' : 'red',
+  margindebt: v => v == null ? 'gray' : v >= 40  ? 'red' : v <= -20 ? 'amber' : 'green',
+  putcall:    v => v >= 1.0 ? 'amber' : v <= 0.5 ? 'red'  : 'green',
 };
 
-// ── 카드 하단 판단기준 텍스트 (소수몽키 4강) ──
+const BADGE_LABEL = {
+  green: '안정', amber: '주의', red: '위험', gray: 'N/A', blue: '지수'
+};
+
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+// 소수몽키 4강 판단기준 텍스트
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 const CRITERIA = {
   sp500:      '',
   nasdaq:     '',
   dow:        '',
-  tenyear:    '4.5%↑ 위험 · 3.5%↓ 안정',
-  dxy:        '106↑ 위험 · 100↓ 안정',
-  wti:        '90↑ 위험 · 70↓ 안정',
-  vix:        '20↓ 안정 · 20~30 고변동 · 30↑ 위기',
-  move:       '100↓ 안정 · 130↑ 위험',
-  feargreed:  '30↓ 공포(매수구간) · 65↑ 탐욕(과열)',
-  hyspread:   '5%↑ 1차위기(15~20%↓) · 7%↑ 2차위기(20%↑↓)',
-  bullbear:   '-20↓ 저점 1차매수 · -30↓ 2차매수 · 30↑ 고점(참고)',
-  margindebt: '+40%↑ 고점시그널(매도준비) · -20%↓ 저점시그널(매수준비)',
-  putcall:    '1.0↑ 저점가능(1년 1~2회) · 1.5↑ 바닥 · 0.5↓ 단기고점',
+  tenyear:    '4.5%↑ 위험  ·  3.5%↓ 안정',
+  dxy:        '106↑ 위험  ·  100↓ 안정',
+  wti:        '90↑ 위험  ·  70↓ 안정',
+  vix:        '20↓ 안정  ·  20~30 고변동  ·  30↑ 위기/충격',
+  move:       '100↓ 안정  ·  130↑ 위험',
+  feargreed:  '30↓ 공포 → 매수구간  ·  65↑ 탐욕 → 과열',
+  hyspread:   '5%↑ 1차 위기(15~20%↓)  ·  7%↑ 2차 위기(20%↑ 하락)',
+  bullbear:   '-20↓ 1차매수  ·  -30↓ 2차매수  ·  30↑ 고점(참고용)',
+  margindebt: '+40%↑ 고점시그널 → 매도준비  ·  -20%↓ 저점시그널 → 매수준비',
+  putcall:    '1.0↑ 저점 가능성(1년 1~2회)  ·  1.5↑ 바닥  ·  0.5↓ 단기 고점',
 };
 
-const SIGNAL_LABELS = {
-  green: '안정', amber: '주의', red: '위험', gray: 'N/A'
-};
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+// 그룹 레이아웃
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+const GROUPS = [
+  {
+    label: '시장 지수',
+    keys: ['sp500','nasdaq','dow','tenyear','dxy','wti'],
+    cols: 6,
+  },
+  {
+    label: '변동성 · 심리 · 포지션',
+    keys: ['vix','move','feargreed','putcall','bullbear'],
+    cols: 5,
+  },
+  {
+    label: '신용 · 레버리지',
+    keys: ['hyspread','margindebt'],
+    cols: 2,
+  },
+];
 
-const SIGNAL_CLASSES = {
-  green: 'sig-green acc-green',
-  amber: 'sig-amber acc-amber',
-  red:   'sig-red   acc-red',
-  gray:  'sig-gray  acc-gray',
-};
-
-function getSignal(key, value) {
-  if (value === null || value === undefined) return 'gray';
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+// 신호 계산
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+function getSignal(key, ind) {
+  const val = (key === 'margindebt' && ind.yoy !== undefined) ? ind.yoy : ind.value;
+  if (val == null) return 'gray';
   const fn = SIGNALS[key];
-  return fn ? fn(value) : 'gray';
+  return fn ? fn(val) : 'gray';
 }
 
-// ──────────────────────────────────────────────
-// 변화량 포맷
-// ──────────────────────────────────────────────
-function fmtChange(key, ind) {
-  const v = ind.change_abs;
-  if (v === null || v === undefined) return '<span class="na">—</span>';
-  const sign = v >= 0 ? '▲' : '▼';
-  const cls = changeClass(key, v);
-  const abs = Math.abs(v).toFixed(
-    key === 'feargreed' ? 1 :
-    key === 'tenyear' || key === 'hyspread' ? 2 : 2
-  );
-  const pct = (ind.change_pct !== undefined && ind.change_pct !== 0)
-    ? ` (${v >= 0 ? '+' : ''}${ind.change_pct.toFixed(1)}%)` : '';
-  return `<span class="${cls}">${sign} ${abs}${pct}</span>`;
-}
-
-const UP_IS_BAD  = new Set(['tenyear','dxy','vix','move','hyspread','margindebt']);
-const UP_IS_GOOD = new Set(['sp500','nasdaq','dow','wti']);
-const UP_NEUTRAL = new Set(['feargreed','bullbear','putcall']);
-
-function changeClass(key, v) {
-  if (v === 0) return '';
-  if (UP_NEUTRAL.has(key)) return '';
-  if (UP_IS_BAD.has(key))  return v > 0 ? 'change-up' : 'change-down';
-  if (UP_IS_GOOD.has(key)) return v > 0 ? 'change-up-g' : 'change-up';
-  return v > 0 ? 'change-up-g' : 'change-up';
-}
-
-// ──────────────────────────────────────────────
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 // 값 포맷
-// ──────────────────────────────────────────────
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 function fmtValue(key, ind) {
   const v = ind.value;
-  if (v === null || v === undefined) return '<span class="na">N/A</span>';
+  if (v == null) return '<span class="na">—</span>';
 
-  if (key === 'sp500')      return v.toLocaleString('en-US', {maximumFractionDigits:0});
-  if (key === 'nasdaq')     return v.toLocaleString('en-US', {maximumFractionDigits:0});
-  if (key === 'dow')        return v.toLocaleString('en-US', {maximumFractionDigits:0});
-  if (key === 'tenyear')    return `${v.toFixed(2)}<span class="card-unit">%</span>`;
-  if (key === 'dxy')        return `${v.toFixed(1)}`;
-  if (key === 'wti')        return `<span style="font-size:14px;color:var(--text2)">$</span>${v.toFixed(1)}`;
-  if (key === 'vix')        return `${v.toFixed(1)}`;
-  if (key === 'move')       return `${v.toFixed(1)}`;
-  if (key === 'feargreed')  return `${Math.round(v)}`;
-  if (key === 'hyspread')   return `${v.toFixed(2)}<span class="card-unit">%p</span>`;
-  if (key === 'bullbear')   return `${v >= 0 ? '+' : ''}${v.toFixed(1)}<span class="card-unit">%p</span>`;
+  if (key === 'sp500')   return v.toLocaleString('en-US', {maximumFractionDigits:0});
+  if (key === 'nasdaq')  return v.toLocaleString('en-US', {maximumFractionDigits:0});
+  if (key === 'dow')     return v.toLocaleString('en-US', {maximumFractionDigits:0});
+  if (key === 'tenyear') return `${v.toFixed(2)}<span class="unit">%</span>`;
+  if (key === 'dxy')     return v.toFixed(1);
+  if (key === 'wti')     return `<span class="prefix">$</span>${v.toFixed(1)}`;
+  if (key === 'vix')     return v.toFixed(1);
+  if (key === 'move')    return v.toFixed(1);
+  if (key === 'feargreed') return Math.round(v);
+  if (key === 'hyspread') return `${v.toFixed(2)}<span class="unit">%p</span>`;
+  if (key === 'bullbear') {
+    const s = v >= 0 ? '+' : '';
+    return `${s}${v.toFixed(1)}<span class="unit">%p</span>`;
+  }
   if (key === 'margindebt') {
     const yoy = ind.yoy !== undefined ? ind.yoy : v;
-    return `${yoy >= 0 ? '+' : ''}${yoy.toFixed(1)}<span class="card-unit">%</span>`;
+    return `${yoy >= 0 ? '+' : ''}${yoy.toFixed(1)}<span class="unit">%</span>`;
   }
-  if (key === 'putcall') return `${v.toFixed(2)}`;
+  if (key === 'putcall') return v.toFixed(2);
   return `${v}`;
 }
 
-// ──────────────────────────────────────────────
-// 카드 서브 텍스트
-// ──────────────────────────────────────────────
-function fmtSub(key, ind) {
-  if (key === 'feargreed') return ind.rating ? `${ind.rating} · 0=공포 100=탐욕` : '';
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+// 변화량 포맷
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+const UP_BAD  = new Set(['tenyear','dxy','vix','move','hyspread','margindebt']);
+const UP_GOOD = new Set(['sp500','nasdaq','dow','wti']);
+
+function fmtChange(key, ind) {
+  const ca = ind.change_abs;
+  const cp = ind.change_pct;
+  if (ca == null) return '';
+
+  const isUp = ca >= 0;
+  const arrow = isUp ? '▲' : '▼';
+  const abs   = Math.abs(ca).toFixed(
+    key === 'tenyear' || key === 'hyspread' ? 2 :
+    key === 'feargreed' ? 1 :
+    key === 'putcall' ? 3 : 2
+  );
+  const pctStr = (cp && cp !== 0) ? ` (${isUp?'+':''}${cp.toFixed(1)}%)` : '';
+
+  let cls = 'neutral';
+  if (ca !== 0) {
+    if (UP_BAD.has(key))  cls = isUp ? 'up-bad'  : 'down-bad';
+    if (UP_GOOD.has(key)) cls = isUp ? 'up-good' : 'down-good';
+  }
+
+  return `<span class="${cls}">${arrow} ${abs}${pctStr}</span> <span style="color:var(--text3);font-size:9.5px">전일대비</span>`;
+}
+
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+// 서브 정보
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+function fmtInfo(key, ind) {
+  if (key === 'feargreed')  return ind.rating ? `${ind.rating}  ·  0=공포 → 100=탐욕` : '';
   if (key === 'bullbear') {
     const b = ind.bull, be = ind.bear;
-    return (b && be) ? `Bull ${b}% / Bear ${be}% · AAII 주간` : 'AAII 주간';
+    return (b && be) ? `Bull ${b}%  /  Bear ${be}%  ·  AAII 주간` : 'AAII 주간';
   }
-  if (key === 'margindebt') return `YoY 변화율 · 분기 (FRED/FINRA)`;
-  if (key === 'putcall')    return ind.manual ? '수동 입력값 · 클릭하여 수정' : 'CBOE Equity P/C';
+  if (key === 'margindebt') return 'YoY 변화율  ·  분기 (FRED/FINRA)';
+  if (key === 'putcall')    return ind.manual ? '수동 입력  ·  클릭하여 수정' : 'CBOE Equity P/C';
   if (key === 'move')       return '채권시장 VIX';
-  if (key === 'hyspread')   return `ICE BofA HY · FRED${ind.date ? ' · ' + ind.date : ''}`;
+  if (key === 'hyspread')   return `ICE BofA HY  ·  FRED${ind.date ? '  ·  ' + ind.date : ''}`;
   return '';
 }
 
-// ──────────────────────────────────────────────
-// 게이지 (fear&greed, bullbear만 유지)
-// ──────────────────────────────────────────────
-function renderGauge(key, ind, sigColor) {
-  const colorMap = { green: 'var(--green)', amber: 'var(--amber)', red: 'var(--red)', gray: 'var(--text3)' };
-  const c = colorMap[sigColor];
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+// 게이지
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+const GAUGE_COLORS = {
+  green: 'var(--green)', amber: 'var(--amber)', red: 'var(--red)',
+  gray: 'var(--text3)', blue: 'var(--blue)'
+};
+const GAUGE_KEYS = new Set(['feargreed','bullbear','putcall']);
 
+function renderGauge(key, ind, sig) {
+  const c = GAUGE_COLORS[sig] || 'var(--text3)';
   if (key === 'feargreed') {
     const pct = Math.min(100, Math.max(0, ind.value || 0));
-    return `<div class="gauge-wrap">
+    return `<div class="gauge">
       <div class="gauge-track">
-        <div class="gauge-fill" style="width:${pct}%;background:linear-gradient(90deg,#ff6b6b,#ffaa00,#00d4aa,#ffaa00,#ff6b6b)"></div>
+        <div class="gauge-fill" style="width:${pct}%;background:linear-gradient(90deg,var(--red) 0%,var(--amber) 40%,var(--green) 60%,var(--amber) 80%,var(--red) 100%)"></div>
       </div>
       <div class="gauge-labels"><span>공포 0</span><span>탐욕 100</span></div>
     </div>`;
   }
   if (key === 'bullbear') {
-    // -40 ~ +40 범위를 0~100%로 매핑
     const pct = Math.min(100, Math.max(0, ((ind.value || 0) + 40) / 80 * 100));
-    return `<div class="gauge-wrap">
+    return `<div class="gauge">
       <div class="gauge-track">
         <div class="gauge-fill" style="width:${pct}%;background:${c}"></div>
       </div>
-      <div class="gauge-labels"><span>약세 -40</span><span>강세 +40</span></div>
+      <div class="gauge-labels"><span>약세 −40</span><span>강세 +40</span></div>
     </div>`;
   }
   if (key === 'putcall') {
-    // 0.3~1.7 범위를 0~100%로 매핑
     const pct = Math.min(100, Math.max(0, ((ind.value || 0.7) - 0.3) / 1.4 * 100));
-    return `<div class="gauge-wrap">
+    return `<div class="gauge">
       <div class="gauge-track">
         <div class="gauge-fill" style="width:${pct}%;background:${c}"></div>
       </div>
-      <div class="gauge-labels"><span>저점↑1.0</span><span>고점↓0.5</span></div>
+      <div class="gauge-labels"><span>저점 1.0↑</span><span>고점 0.5↓</span></div>
     </div>`;
   }
   return '';
 }
 
-// ──────────────────────────────────────────────
-// Put/Call 수동 입력 (localStorage)
-// ──────────────────────────────────────────────
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+// Put/Call 수동 입력
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 function getPCManual() {
   const v = localStorage.getItem('putcall_manual');
   return v !== null ? parseFloat(v) : null;
 }
-function setPCManual(v) {
-  localStorage.setItem('putcall_manual', v);
-}
 function editPutCall() {
   const cur = getPCManual();
-  const input = prompt('Put/Call Ratio 값 직접 입력 (예: 0.62)\nCBOE Equity P/C 기준', cur !== null ? cur : '');
+  const input = prompt(
+    'Put/Call Ratio 직접 입력 (CBOE Equity P/C 기준)\n예: 0.62  |  1이상 = 저점 가능  |  0.5이하 = 단기고점',
+    cur !== null ? cur : ''
+  );
   if (input === null) return;
   const val = parseFloat(input);
   if (isNaN(val) || val <= 0) { alert('올바른 숫자를 입력해주세요.'); return; }
-  setPCManual(val);
+  localStorage.setItem('putcall_manual', val);
   loadData();
 }
 
-// ──────────────────────────────────────────────
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 // 카드 렌더
-// ──────────────────────────────────────────────
-const GAUGE_KEYS = new Set(['feargreed','putcall','bullbear']);
-
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 function renderCard(key, ind) {
+  // Put/Call 수동값 우선
   if (key === 'putcall') {
-    const manual = getPCManual();
-    if (manual !== null) {
-      ind = { ...ind, value: manual, ok: true, manual: true };
-    }
+    const m = getPCManual();
+    if (m !== null) ind = { ...ind, value: m, ok: true, manual: true };
   }
 
-  const sigVal = (key === 'margindebt' && ind.yoy !== undefined) ? ind.yoy : ind.value;
-  const sig = getSignal(key, sigVal);
-  const [sigCls, accCls] = SIGNAL_CLASSES[sig].split(' ');
-  const sub = fmtSub(key, ind);
+  const sig      = getSignal(key, ind);
+  const badgeCls = `badge badge-${sig}`;
+  const label    = BADGE_LABEL[sig];
+  const info     = fmtInfo(key, ind);
   const criteria = CRITERIA[key] || '';
+  const errBadge = (!ind.ok && ind.value == null)
+    ? '<span class="err-badge">Actions 실행 필요</span>' : '';
 
-  const errorBadge = (!ind.ok && ind.value === null)
-    ? '<span class="error-badge">수집오류</span>' : '';
+  const editIcon = key === 'putcall'
+    ? `<span class="edit-icon" onclick="event.stopPropagation();editPutCall()">✏</span>` : '';
 
-  const editBtn = (key === 'putcall')
-    ? `<span onclick="editPutCall()" title="직접 입력" style="cursor:pointer;font-size:11px;color:var(--text3);margin-left:4px">✏️</span>` : '';
+  const changeHtml = (key === 'putcall' && ind.manual)
+    ? `<div class="card-change"><span style="color:var(--text3)">수동 입력값</span></div>`
+    : `<div class="card-change">${fmtChange(key, ind)}</div>`;
 
-  const changeRow = (key === 'putcall' && ind.manual)
-    ? `<div class="card-sub">수동 입력값 · 클릭하여 수정</div>`
-    : `<div class="card-sub">${fmtChange(key, ind)} 전일 대비</div>`;
+  const isClickable = key === 'putcall';
 
   return `
-  <div class="card" ${key === 'putcall' ? 'onclick="editPutCall()" style="cursor:pointer"' : ''}>
-    <div class="card-accent ${accCls}"></div>
-    <div class="card-top">
-      <span class="card-name">${ind.name}${errorBadge}</span>
-      <span class="signal ${sigCls}">${SIGNAL_LABELS[sig]}</span>
-    </div>
-    <div class="card-value">${fmtValue(key, ind)}${editBtn}</div>
-    ${sub ? `<div class="card-sub">${sub}</div>` : ''}
-    ${changeRow}
-    ${GAUGE_KEYS.has(key) ? renderGauge(key, ind, sig) : ''}
-    ${criteria ? `<div class="card-criteria">${criteria}</div>` : ''}
-  </div>`;
+<div class="card sig-${sig}${isClickable ? ' clickable' : ''}"
+     ${isClickable ? 'onclick="editPutCall()"' : ''}>
+  <div class="card-top">
+    <span class="card-name">${ind.name}${errBadge}</span>
+    <span class="${badgeCls}">${label}</span>
+  </div>
+  <div class="card-value">${fmtValue(key, ind)}${editIcon}</div>
+  ${info  ? `<div class="card-info">${info}</div>` : ''}
+  ${changeHtml}
+  ${GAUGE_KEYS.has(key) ? renderGauge(key, ind, sig) : ''}
+  ${criteria ? `<div class="card-criteria">${criteria}</div>` : ''}
+</div>`;
 }
 
-// ──────────────────────────────────────────────
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 // 전체 렌더
-// ──────────────────────────────────────────────
-const GROUPS = [
-  { label: '시장 지수 · 금리 · 환율 · 원자재', keys: ['sp500','nasdaq','dow','tenyear','dxy','wti'], cols: 6 },
-  { label: '변동성 · 심리 · 포지션',           keys: ['vix','move','feargreed','putcall','bullbear'], cols: 5 },
-  { label: '신용 · 레버리지',                  keys: ['hyspread','margindebt'], cols: 2 },
-];
-
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 function render(data) {
-  let html = `
-  <div class="header">
-    <div class="header-left">
-      <h1>📊 매크로 지표 대시보드</h1>
-      <p>업데이트: ${data.updated_at}</p>
-    </div>
-    <div class="header-right">
-      <span class="badge-live"><span class="dot"></span>LIVE</span>
-      <button class="btn-refresh" onclick="loadData()">↺ 새로고침</button>
-    </div>
-  </div>
-  <div class="main">`;
+  let sections = '';
 
   for (const group of GROUPS) {
-    html += `<div class="section-label">${group.label}</div>`;
-    html += `<div class="grid" style="grid-template-columns:repeat(${group.cols},1fr)">`;
-    for (const key of group.keys) {
-      const ind = data.indicators[key];
-      if (!ind) continue;
-      html += renderCard(key, ind);
-    }
-    html += `</div>`;
+    const cards = group.keys
+      .map(k => data.indicators[k] ? renderCard(k, data.indicators[k]) : '')
+      .join('');
+
+    sections += `
+<div class="section">
+  <div class="section-header">
+    <span class="section-title">${group.label}</span>
+    <span class="section-line"></span>
+  </div>
+  <div class="grid" style="grid-template-columns:repeat(${group.cols},1fr)">
+    ${cards}
+  </div>
+</div>`;
   }
 
-  html += `</div>
-  <div class="footer">
-    <p>데이터 소스: yfinance · CNN · FRED · AAII · FINRA · CBOE<br>
-       GitHub Actions 자동 업데이트 · 매일 06:00 KST · 판단기준: 소수몽키 마스터클래스 4강</p>
-    <p style="text-align:right">마지막 업데이트<br><strong style="color:var(--text)">${data.updated_at}</strong></p>
-  </div>`;
+  document.getElementById('app').innerHTML = `
+<header class="header">
+  <div class="header-brand">
+    <span class="logo">📊 매크로<span> 대시보드</span></span>
+    <span class="divider"></span>
+    <span class="subtitle">소수몽키 4강 기준 · GitHub Actions 매일 06:00 KST</span>
+  </div>
+  <div class="header-right">
+    <span class="update-time">${data.updated_at}</span>
+    <span class="live-dot"><span class="dot"></span>LIVE</span>
+    <button class="btn-refresh" onclick="loadData()">↺ 새로고침</button>
+  </div>
+</header>
 
-  document.getElementById('app').innerHTML = html;
+<main class="main">
+  ${sections}
+</main>
+
+<footer class="footer">
+  <p>데이터 소스: yfinance · CNN Fear&amp;Greed · FRED · AAII · FINRA · CBOE<br>
+     판단기준: 소수몽키 마스터클래스 4강 · 투자 판단은 본인 책임</p>
+  <p style="text-align:right">
+    마지막 업데이트<br>
+    <strong>${data.updated_at}</strong>
+  </p>
+</footer>`;
 }
 
-// ──────────────────────────────────────────────
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 // 데이터 로드
-// ──────────────────────────────────────────────
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 function loadData() {
   fetch('data.json?t=' + Date.now())
-    .then(r => r.json())
+    .then(r => { if (!r.ok) throw new Error(r.status); return r.json(); })
     .then(render)
     .catch(err => {
-      document.getElementById('app').innerHTML =
-        `<div class="loading">데이터 로드 실패<br><small style="color:#ff6b6b">${err.message}</small><br><br>
-         <button class="btn-refresh" onclick="loadData()">다시 시도</button></div>`;
+      document.getElementById('app').innerHTML = `
+<div class="loading">
+  데이터 로드 실패<br>
+  <small style="color:var(--red)">${err.message}</small><br><br>
+  <button class="btn-refresh" onclick="loadData()">다시 시도</button>
+</div>`;
     });
 }
 
