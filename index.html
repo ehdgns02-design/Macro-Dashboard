@@ -5,611 +5,422 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>매크로 지표 대시보드</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
     :root {
-      --bg:        #0b0e1a;
-      --bg2:       #111525;
-      --bg3:       #1a1f35;
-      --bg4:       #202540;
-      --border:    rgba(255,255,255,0.06);
-      --border2:   rgba(255,255,255,0.12);
-      --text:      #f0f2f8;
-      --text2:     #8892aa;
-      --text3:     #4a5270;
-      --green:     #10d9a0;
-      --green-dim: rgba(16,217,160,0.12);
-      --green-glow:rgba(16,217,160,0.06);
-      --red:       #f05c6e;
-      --red-dim:   rgba(240,92,110,0.12);
-      --amber:     #f5a623;
-      --amber-dim: rgba(245,166,35,0.12);
-      --blue:      #5b8def;
-      --blue-dim:  rgba(91,141,239,0.12);
-      --gray-dim:  rgba(74,82,112,0.15);
+      --bg:      #07090f;
+      --bg2:     #0d1117;
+      --card:    rgba(255,255,255,0.028);
+      --card-h:  rgba(255,255,255,0.052);
+      --b:       rgba(255,255,255,0.07);
+      --b2:      rgba(255,255,255,0.13);
+      --text:    #f1f3fa;
+      --text2:   #7a84a0;
+      --text3:   #3d4460;
+      --green:   #1ad49c;
+      --red:     #f0516a;
+      --amber:   #f7a928;
+      --blue:    #6094f8;
     }
-
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-
+    *,*::before,*::after { box-sizing:border-box; margin:0; padding:0; }
     body {
-      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
       background: var(--bg);
+      background-image:
+        radial-gradient(ellipse 80% 60% at 10% 0%,  rgba(96,148,248,0.045) 0%, transparent 55%),
+        radial-gradient(ellipse 60% 40% at 90% 100%, rgba(26,212,156,0.03)  0%, transparent 55%);
       color: var(--text);
       min-height: 100vh;
       -webkit-font-smoothing: antialiased;
     }
 
-    /* ── HEADER ── */
-    .header {
-      position: sticky; top: 0; z-index: 100;
-      background: rgba(11,14,26,0.92);
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
-      border-bottom: 1px solid var(--border);
-      padding: 0 28px;
-      height: 56px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 16px;
+    /* ─── HEADER ─────────────────────────────── */
+    .hdr {
+      position: sticky; top: 0; z-index: 99;
+      background: rgba(7,9,15,0.85);
+      backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px);
+      border-bottom: 1px solid var(--b);
+      height: 58px; padding: 0 32px;
+      display: flex; align-items: center; justify-content: space-between;
     }
-    .header-brand {
-      display: flex; align-items: center; gap: 10px;
+    .hdr-left { display:flex; align-items:center; gap:14px; }
+    .hdr-title {
+      font-size: 15px; font-weight: 700; letter-spacing: -0.4px;
     }
-    .header-brand .logo {
-      font-size: 14px; font-weight: 700; letter-spacing: -0.3px;
-      color: var(--text);
-    }
-    .header-brand .logo span { color: var(--green); }
-    .header-brand .divider {
-      width: 1px; height: 16px; background: var(--border2);
-    }
-    .header-brand .subtitle {
-      font-size: 11.5px; color: var(--text3); font-weight: 400;
-    }
-    .header-right {
-      display: flex; align-items: center; gap: 10px;
-    }
-    .update-time {
-      font-size: 11px; color: var(--text3);
-    }
-    .live-dot {
-      display: inline-flex; align-items: center; gap: 5px;
-      font-size: 10.5px; font-weight: 500; color: var(--green);
+    .hdr-title em { color: var(--green); font-style:normal; }
+    .hdr-sep { width:1px; height:16px; background:var(--b2); }
+    .hdr-sub { font-size: 11px; color: var(--text3); font-weight:400; }
+    .hdr-right { display:flex; align-items:center; gap:12px; }
+    .hdr-ts { font-size:11px; color:var(--text3); }
+    .live {
+      display:inline-flex; align-items:center; gap:5px;
+      font-size:10.5px; font-weight:600; color:var(--green);
+      background:rgba(26,212,156,0.08); border:1px solid rgba(26,212,156,0.18);
+      padding:4px 10px; border-radius:20px;
     }
     .dot {
-      width: 5px; height: 5px; border-radius: 50%;
-      background: var(--green);
-      box-shadow: 0 0 6px var(--green);
-      animation: pulse 2.4s ease-in-out infinite;
+      width:5px; height:5px; border-radius:50%;
+      background:var(--green); box-shadow:0 0 8px var(--green);
+      animation:blink 2.5s ease-in-out infinite;
     }
-    @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.25} }
+    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:.2} }
+    .btn {
+      font-size:12px; font-weight:500; font-family:inherit;
+      color:var(--text2); background:rgba(255,255,255,0.05);
+      border:1px solid var(--b2); padding:6px 14px;
+      border-radius:7px; cursor:pointer; transition:all .15s;
+    }
+    .btn:hover { color:var(--text); background:rgba(255,255,255,0.09); }
 
-    .btn-refresh {
-      display: inline-flex; align-items: center; gap: 5px;
-      font-size: 11.5px; font-weight: 500; color: var(--text2);
-      background: var(--bg3);
-      border: 1px solid var(--border2);
-      padding: 5px 12px; border-radius: 6px;
-      cursor: pointer; transition: all 0.15s; letter-spacing: 0;
-      font-family: inherit;
-    }
-    .btn-refresh:hover { color: var(--text); background: var(--bg4); }
+    /* ─── LAYOUT ──────────────────────────────── */
+    .main { padding:28px 32px 56px; max-width:1280px; margin:0 auto; }
 
-    /* ── MAIN ── */
-    .main {
-      padding: 28px 28px 48px;
-      max-width: 1260px;
-      margin: 0 auto;
-    }
-
-    /* ── SECTION ── */
-    .section { margin-bottom: 32px; }
-    .section-header {
-      display: flex; align-items: center; gap: 10px;
-      margin-bottom: 12px;
-    }
-    .section-title {
-      font-size: 10px; font-weight: 600;
-      letter-spacing: 0.12em; text-transform: uppercase;
-      color: var(--text3);
-    }
-    .section-line {
-      flex: 1; height: 1px; background: var(--border);
-    }
-
-    /* ── GRID ── */
-    .grid {
+    /* ─── MASTER GRID ─────────────────────────── */
+    .master-grid {
       display: grid;
-      gap: 8px;
+      grid-template-columns: repeat(6, 1fr);
+      gap: 10px;
+      align-items: start;
     }
 
-    /* ── CARD ── */
+    /* Section label spans full row */
+    .sec-label {
+      grid-column: 1 / -1;
+      margin-top: 24px;
+      margin-bottom: 2px;
+      display: flex; align-items: center; gap: 12px;
+    }
+    .sec-label:first-child { margin-top: 0; }
+    .sec-label span {
+      font-size: 9.5px; font-weight: 700;
+      letter-spacing: .14em; text-transform: uppercase;
+      color: var(--text3); white-space: nowrap;
+    }
+    .sec-line { flex:1; height:1px; background:var(--b); }
+
+    /* ─── CARD ────────────────────────────────── */
     .card {
-      background: var(--bg2);
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      padding: 16px 16px 14px;
+      background: var(--card);
+      border: 1px solid var(--b);
+      border-top: 2px solid transparent;
+      border-radius: 12px;
+      padding: 18px 18px 16px;
       position: relative;
-      transition: border-color 0.2s, background 0.2s;
-      overflow: hidden;
+      transition: background .18s, border-color .18s, transform .18s, box-shadow .18s;
+      min-height: 160px;
+      display: flex; flex-direction: column; justify-content: space-between;
     }
-    .card::before {
-      content: '';
-      position: absolute;
-      top: 0; left: 0; right: 0;
-      height: 2px;
-      border-radius: 10px 10px 0 0;
-      opacity: 0.7;
-    }
-    .card.sig-green::before { background: var(--green); }
-    .card.sig-amber::before { background: var(--amber); }
-    .card.sig-red::before   { background: var(--red); }
-    .card.sig-gray::before  { background: var(--text3); opacity: 0.3; }
-    .card.sig-blue::before  { background: var(--blue); }
-
     .card:hover {
-      border-color: var(--border2);
-      background: var(--bg3);
+      background: var(--card-h);
+      border-color: var(--b2);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 32px rgba(0,0,0,0.35);
     }
+    .card.c-green { border-top-color: var(--green); }
+    .card.c-amber { border-top-color: var(--amber); }
+    .card.c-red   { border-top-color: var(--red); }
+    .card.c-blue  { border-top-color: var(--blue); }
+    .card.c-gray  { border-top-color: var(--text3); }
+    .card.c-green:hover { box-shadow: 0 8px 32px rgba(26,212,156,0.08); }
+    .card.c-red:hover   { box-shadow: 0 8px 32px rgba(240,81,106,0.08); }
+    .card.c-amber:hover { box-shadow: 0 8px 32px rgba(247,169,40,0.08); }
     .card.clickable { cursor: pointer; }
 
-    /* Card top row */
-    .card-top {
-      display: flex; justify-content: space-between;
-      align-items: flex-start;
-      margin-bottom: 10px;
-    }
-    .card-name {
-      font-size: 10.5px; font-weight: 500;
-      color: var(--text2);
-      line-height: 1.4;
-    }
+    /* card top row */
+    .c-top { display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:12px; }
+    .c-name { font-size:11px; font-weight:500; color:var(--text2); line-height:1.4; }
+    .c-name .err { font-size:9px; background:rgba(240,81,106,.15); color:var(--red); padding:1px 5px; border-radius:3px; margin-left:4px; }
 
-    /* Signal badge */
+    /* badge */
     .badge {
-      font-size: 9px; font-weight: 600;
-      padding: 2px 7px; border-radius: 4px;
-      letter-spacing: 0.03em;
-      white-space: nowrap; flex-shrink: 0;
+      font-size:9.5px; font-weight:700; letter-spacing:.04em;
+      padding:2.5px 8px; border-radius:5px; white-space:nowrap; flex-shrink:0;
     }
-    .badge-green { background: var(--green-dim); color: var(--green); }
-    .badge-amber { background: var(--amber-dim); color: var(--amber); }
-    .badge-red   { background: var(--red-dim);   color: var(--red);   }
-    .badge-gray  { background: var(--gray-dim);  color: var(--text3); }
-    .badge-blue  { background: var(--blue-dim);  color: var(--blue);  }
+    .bg-green { background:rgba(26,212,156,.14);  color:var(--green); }
+    .bg-amber { background:rgba(247,169,40,.14);  color:var(--amber); }
+    .bg-red   { background:rgba(240,81,106,.14);  color:var(--red); }
+    .bg-blue  { background:rgba(96,148,248,.14);  color:var(--blue); }
+    .bg-gray  { background:rgba(61,68,96,.25);    color:var(--text3); }
 
-    /* Value */
-    .card-value {
-      font-size: 26px; font-weight: 700;
-      letter-spacing: -0.8px;
+    /* value */
+    .c-val {
+      font-size: 34px; font-weight: 800;
+      letter-spacing: -1.2px; line-height: 1;
       color: var(--text);
-      line-height: 1;
-      margin-bottom: 5px;
       font-variant-numeric: tabular-nums;
     }
-    .card-value .unit {
-      font-size: 14px; font-weight: 500;
-      color: var(--text3); letter-spacing: 0;
-    }
-    .card-value .prefix {
-      font-size: 15px; font-weight: 500;
-      color: var(--text3); margin-right: 1px;
-    }
-    .na { color: var(--text3); font-size: 18px; font-weight: 400; }
+    .c-val .u { font-size:16px; font-weight:500; color:var(--text3); letter-spacing:0; }
+    .c-val .pfx { font-size:18px; font-weight:500; color:var(--text3); margin-right:1px; }
+    .na { color:var(--text3); font-size:22px; font-weight:400; }
+    .edit-ic { font-size:13px; color:var(--text3); margin-left:6px; cursor:pointer; }
 
-    /* Change row */
-    .card-change {
-      font-size: 10.5px;
-      display: flex; align-items: center; gap: 6px;
-      margin-bottom: 3px;
-      font-variant-numeric: tabular-nums;
-    }
-    .up-bad   { color: var(--red); }
-    .down-bad { color: var(--green); }
-    .up-good  { color: var(--green); }
-    .down-good{ color: var(--red); }
-    .neutral  { color: var(--text3); }
+    /* sub info */
+    .c-info { font-size:10px; color:var(--text3); line-height:1.55; margin-top:6px; }
 
-    /* Sub info */
-    .card-info {
-      font-size: 9.5px; color: var(--text3);
-      line-height: 1.5; margin-top: 2px;
+    /* change */
+    .c-chg { font-size:11.5px; font-weight:600; margin-top:5px; font-variant-numeric:tabular-nums; }
+    .c-chg .lbl { font-size:10px; font-weight:400; color:var(--text3); margin-left:4px; }
+    .up-bad   { color:var(--red); }
+    .dn-bad   { color:var(--green); }
+    .up-good  { color:var(--green); }
+    .dn-good  { color:var(--red); }
+    .neut     { color:var(--text3); }
+
+    /* criteria */
+    .c-crit {
+      margin-top:10px; padding-top:9px;
+      border-top:1px solid var(--b);
+      font-size:9.5px; color:var(--text3); line-height:1.65;
     }
 
-    /* Criteria */
-    .card-criteria {
-      margin-top: 10px;
-      padding-top: 8px;
-      border-top: 1px solid var(--border);
-      font-size: 9px; color: var(--text3);
-      line-height: 1.6;
-    }
+    /* gauge */
+    .gauge { margin-top:10px; }
+    .g-track { height:3px; border-radius:2px; background:rgba(255,255,255,0.07); overflow:hidden; }
+    .g-fill  { height:100%; border-radius:2px; transition:width .7s cubic-bezier(.4,0,.2,1); }
+    .g-lbl   { display:flex; justify-content:space-between; margin-top:4px; }
+    .g-lbl span { font-size:9px; color:var(--text3); }
 
-    /* ── GAUGE ── */
-    .gauge { margin-top: 10px; }
-    .gauge-track {
-      height: 3px; border-radius: 2px;
-      background: var(--bg4);
-      overflow: hidden;
-    }
-    .gauge-fill {
-      height: 100%; border-radius: 2px;
-      transition: width 0.7s cubic-bezier(.4,0,.2,1);
-    }
-    .gauge-labels {
-      display: flex; justify-content: space-between;
-      margin-top: 4px;
-    }
-    .gauge-labels span { font-size: 8.5px; color: var(--text3); }
-
-    /* ── EDIT ICON ── */
-    .edit-icon {
-      display: inline-flex; align-items: center;
-      font-size: 11px; color: var(--text3);
-      margin-left: 5px; cursor: pointer;
-      vertical-align: middle;
-    }
-
-    /* ── FOOTER ── */
+    /* ─── FOOTER ──────────────────────────────── */
     .footer {
-      border-top: 1px solid var(--border);
-      padding: 16px 28px;
-      display: flex; justify-content: space-between;
-      align-items: center; flex-wrap: wrap; gap: 8px;
+      border-top:1px solid var(--b); padding:16px 32px;
+      display:flex; justify-content:space-between;
+      align-items:center; flex-wrap:wrap; gap:10px;
     }
-    .footer p {
-      font-size: 10px; color: var(--text3); line-height: 1.7;
-    }
-    .footer strong { color: var(--text2); }
+    .footer p { font-size:10px; color:var(--text3); line-height:1.8; }
+    .footer strong { color:var(--text2); font-weight:500; }
 
-    /* ── LOADING ── */
-    .loading {
-      text-align: center; padding: 100px 20px;
-      color: var(--text2); font-size: 13px;
-    }
-    .err-badge {
-      display: inline-block; font-size: 8.5px;
-      background: var(--red-dim); color: var(--red);
-      padding: 1px 5px; border-radius: 3px; margin-left: 3px;
-    }
+    /* ─── LOADING ─────────────────────────────── */
+    .loading { text-align:center; padding:120px 20px; color:var(--text2); font-size:14px; }
 
-    /* ── RESPONSIVE ── */
-    @media (max-width: 900px) {
-      .grid { grid-template-columns: repeat(3,1fr) !important; }
+    /* ─── RESPONSIVE ──────────────────────────── */
+    @media (max-width:1100px) {
+      .master-grid { grid-template-columns:repeat(4,1fr); }
     }
-    @media (max-width: 580px) {
-      .grid { grid-template-columns: repeat(2,1fr) !important; }
-      .main { padding: 16px 14px 40px; }
-      .header { padding: 0 16px; }
+    @media (max-width:720px) {
+      .master-grid { grid-template-columns:repeat(2,1fr); }
+      .main { padding:16px 14px 40px; }
+      .hdr { padding:0 16px; }
+      .hdr-sub,.hdr-ts { display:none; }
+      .footer { padding:14px 16px; }
     }
   </style>
 </head>
 <body>
-
-<div id="app">
-  <div class="loading">데이터 로딩 중…</div>
-</div>
+<div id="app"><div class="loading">로딩 중…</div></div>
 
 <script>
-// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-// 소수몽키 4강 기반 신호 임계값
-// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+/* ━━━ SIGNAL CONFIG ━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
 const SIGNALS = {
-  sp500:      v => v == null ? 'gray' : 'blue',
-  nasdaq:     v => v == null ? 'gray' : 'blue',
-  dow:        v => v == null ? 'gray' : 'blue',
-  tenyear:    v => v < 3.5  ? 'green' : v < 4.5  ? 'amber' : 'red',
-  dxy:        v => v < 100  ? 'green' : v < 106  ? 'amber' : 'red',
-  wti:        v => v < 70   ? 'green' : v < 90   ? 'amber' : 'red',
-  vix:        v => v < 20   ? 'green' : v < 30   ? 'amber' : 'red',
-  move:       v => v < 100  ? 'green' : v < 130  ? 'amber' : 'red',
-  feargreed:  v => v < 30   ? 'amber' : v < 65   ? 'green' : 'red',
-  hyspread:   v => v < 5    ? 'green' : v < 7    ? 'amber' : 'red',
-  bullbear:   v => v < -20  ? 'amber' : v < 30   ? 'green' : 'red',
-  margindebt: v => v == null ? 'gray' : v >= 40  ? 'red' : v <= -20 ? 'amber' : 'green',
-  putcall:    v => v >= 1.0 ? 'amber' : v <= 0.5 ? 'red'  : 'green',
+  sp500:      v => v == null ? 'gray':'blue',
+  nasdaq:     v => v == null ? 'gray':'blue',
+  dow:        v => v == null ? 'gray':'blue',
+  tenyear:    v => v < 3.5  ? 'green': v < 4.5  ? 'amber':'red',
+  dxy:        v => v < 100  ? 'green': v < 106  ? 'amber':'red',
+  wti:        v => v < 70   ? 'green': v < 90   ? 'amber':'red',
+  vix:        v => v < 20   ? 'green': v < 30   ? 'amber':'red',
+  move:       v => v < 100  ? 'green': v < 130  ? 'amber':'red',
+  feargreed:  v => v < 30   ? 'amber': v < 65   ? 'green':'red',
+  hyspread:   v => v < 5    ? 'green': v < 7    ? 'amber':'red',
+  bullbear:   v => v < -20  ? 'amber': v < 30   ? 'green':'red',
+  margindebt: v => v == null ? 'gray': v >= 40  ? 'red': v <= -20 ? 'amber':'green',
+  putcall:    v => v >= 1.0 ? 'amber': v <= 0.5 ? 'red':'green',
 };
+const BADGE_LABEL = { green:'안정', amber:'주의', red:'위험', gray:'N/A', blue:'지수' };
 
-const BADGE_LABEL = {
-  green: '안정', amber: '주의', red: '위험', gray: 'N/A', blue: '지수'
-};
-
-// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-// 소수몽키 4강 판단기준 텍스트
-// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+/* ━━━ CRITERIA TEXT ━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
 const CRITERIA = {
-  sp500:      '',
-  nasdaq:     '',
-  dow:        '',
+  sp500:'', nasdaq:'', dow:'',
   tenyear:    '4.5%↑ 위험  ·  3.5%↓ 안정',
   dxy:        '106↑ 위험  ·  100↓ 안정',
   wti:        '90↑ 위험  ·  70↓ 안정',
-  vix:        '20↓ 안정  ·  20~30 고변동  ·  30↑ 위기/충격',
+  vix:        '20↓ 안정  ·  20~30 고변동  ·  30↑ 위기',
   move:       '100↓ 안정  ·  130↑ 위험',
   feargreed:  '30↓ 공포 → 매수구간  ·  65↑ 탐욕 → 과열',
-  hyspread:   '5%↑ 1차 위기(15~20%↓)  ·  7%↑ 2차 위기(20%↑ 하락)',
+  hyspread:   '5%↑ 1차 위기(15~20%↓)  ·  7%↑ 2차 위기(20%↑ 급락)',
   bullbear:   '-20↓ 1차매수  ·  -30↓ 2차매수  ·  30↑ 고점(참고용)',
   margindebt: '+40%↑ 고점시그널 → 매도준비  ·  -20%↓ 저점시그널 → 매수준비',
-  putcall:    '1.0↑ 저점 가능성(1년 1~2회)  ·  1.5↑ 바닥  ·  0.5↓ 단기 고점',
+  putcall:    '1.0↑ 저점 가능(1년 1~2회)  ·  1.5↑ 바닥  ·  0.5↓ 단기고점',
 };
 
-// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-// 그룹 레이아웃
-// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+/* ━━━ GROUP ORDER ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
 const GROUPS = [
-  {
-    label: '시장 지수',
-    keys: ['sp500','nasdaq','dow','tenyear','dxy','wti'],
-    cols: 6,
-  },
-  {
-    label: '변동성 · 심리 · 포지션',
-    keys: ['vix','move','feargreed','putcall','bullbear'],
-    cols: 5,
-  },
-  {
-    label: '신용 · 레버리지',
-    keys: ['hyspread','margindebt'],
-    cols: 2,
-  },
+  { label:'시장 지수',             keys:['sp500','nasdaq','dow','tenyear','dxy','wti'] },
+  { label:'변동성 · 심리 · 포지션', keys:['vix','move','feargreed','putcall','bullbear'] },
+  { label:'신용 · 레버리지',        keys:['hyspread','margindebt'] },
 ];
 
-// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-// 신호 계산
-// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-function getSignal(key, ind) {
-  const val = (key === 'margindebt' && ind.yoy !== undefined) ? ind.yoy : ind.value;
-  if (val == null) return 'gray';
-  const fn = SIGNALS[key];
-  return fn ? fn(val) : 'gray';
+/* ━━━ SIGNAL HELPER ━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+function sig(key, ind) {
+  const v = (key==='margindebt' && ind.yoy!==undefined) ? ind.yoy : ind.value;
+  if (v == null) return 'gray';
+  return (SIGNALS[key]||(() => 'gray'))(v);
 }
 
-// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-// 값 포맷
-// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-function fmtValue(key, ind) {
+/* ━━━ VALUE FORMAT ━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+function fmtVal(key, ind) {
   const v = ind.value;
   if (v == null) return '<span class="na">—</span>';
-
-  if (key === 'sp500')   return v.toLocaleString('en-US', {maximumFractionDigits:0});
-  if (key === 'nasdaq')  return v.toLocaleString('en-US', {maximumFractionDigits:0});
-  if (key === 'dow')     return v.toLocaleString('en-US', {maximumFractionDigits:0});
-  if (key === 'tenyear') return `${v.toFixed(2)}<span class="unit">%</span>`;
-  if (key === 'dxy')     return v.toFixed(1);
-  if (key === 'wti')     return `<span class="prefix">$</span>${v.toFixed(1)}`;
-  if (key === 'vix')     return v.toFixed(1);
-  if (key === 'move')    return v.toFixed(1);
-  if (key === 'feargreed') return Math.round(v);
-  if (key === 'hyspread') return `${v.toFixed(2)}<span class="unit">%p</span>`;
-  if (key === 'bullbear') {
-    const s = v >= 0 ? '+' : '';
-    return `${s}${v.toFixed(1)}<span class="unit">%p</span>`;
+  if (key==='sp500'||key==='nasdaq'||key==='dow')
+    return v.toLocaleString('en-US',{maximumFractionDigits:0});
+  if (key==='tenyear')  return `${v.toFixed(2)}<span class="u">%</span>`;
+  if (key==='dxy')      return v.toFixed(1);
+  if (key==='wti')      return `<span class="pfx">$</span>${v.toFixed(1)}`;
+  if (key==='vix')      return v.toFixed(1);
+  if (key==='move')     return v.toFixed(1);
+  if (key==='feargreed')return Math.round(v);
+  if (key==='hyspread') return `${v.toFixed(2)}<span class="u">%p</span>`;
+  if (key==='bullbear') return `${v>=0?'+':''}${v.toFixed(1)}<span class="u">%p</span>`;
+  if (key==='margindebt'){
+    const y = ind.yoy!==undefined ? ind.yoy : v;
+    return `${y>=0?'+':''}${y.toFixed(1)}<span class="u">%</span>`;
   }
-  if (key === 'margindebt') {
-    const yoy = ind.yoy !== undefined ? ind.yoy : v;
-    return `${yoy >= 0 ? '+' : ''}${yoy.toFixed(1)}<span class="unit">%</span>`;
-  }
-  if (key === 'putcall') return v.toFixed(2);
+  if (key==='putcall') return v.toFixed(2);
   return `${v}`;
 }
 
-// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-// 변화량 포맷
-// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+/* ━━━ CHANGE FORMAT ━━━━━━━━━━━━━━━━━━━━━━━━━━ */
 const UP_BAD  = new Set(['tenyear','dxy','vix','move','hyspread','margindebt']);
 const UP_GOOD = new Set(['sp500','nasdaq','dow','wti']);
-
-function fmtChange(key, ind) {
-  const ca = ind.change_abs;
-  const cp = ind.change_pct;
+function fmtChg(key, ind) {
+  const ca = ind.change_abs, cp = ind.change_pct;
   if (ca == null) return '';
-
-  const isUp = ca >= 0;
-  const arrow = isUp ? '▲' : '▼';
+  const up    = ca >= 0;
+  const arrow = up ? '▲' : '▼';
   const abs   = Math.abs(ca).toFixed(
-    key === 'tenyear' || key === 'hyspread' ? 2 :
-    key === 'feargreed' ? 1 :
-    key === 'putcall' ? 3 : 2
+    key==='tenyear'||key==='hyspread' ? 2 :
+    key==='putcall' ? 3 : key==='feargreed' ? 1 : 2
   );
-  const pctStr = (cp && cp !== 0) ? ` (${isUp?'+':''}${cp.toFixed(1)}%)` : '';
-
-  let cls = 'neutral';
-  if (ca !== 0) {
-    if (UP_BAD.has(key))  cls = isUp ? 'up-bad'  : 'down-bad';
-    if (UP_GOOD.has(key)) cls = isUp ? 'up-good' : 'down-good';
+  const pct = (cp && cp!==0) ? ` (${up?'+':''}${cp.toFixed(1)}%)` : '';
+  let cls = 'neut';
+  if (ca!==0){
+    if (UP_BAD.has(key))  cls = up ? 'up-bad':'dn-bad';
+    if (UP_GOOD.has(key)) cls = up ? 'up-good':'dn-good';
   }
-
-  return `<span class="${cls}">${arrow} ${abs}${pctStr}</span> <span style="color:var(--text3);font-size:9.5px">전일대비</span>`;
+  return `<span class="${cls}">${arrow} ${abs}${pct}</span><span class="lbl">전일대비</span>`;
 }
 
-// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-// 서브 정보
-// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+/* ━━━ INFO TEXT ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
 function fmtInfo(key, ind) {
-  if (key === 'feargreed')  return ind.rating ? `${ind.rating}  ·  0=공포 → 100=탐욕` : '';
-  if (key === 'bullbear') {
-    const b = ind.bull, be = ind.bear;
-    return (b && be) ? `Bull ${b}%  /  Bear ${be}%  ·  AAII 주간` : 'AAII 주간';
+  if (key==='feargreed')  return ind.rating ? `${ind.rating}  ·  0=공포 → 100=탐욕` : '';
+  if (key==='bullbear'){
+    const b=ind.bull, be=ind.bear;
+    return (b&&be) ? `Bull ${b}%  /  Bear ${be}%  ·  AAII 주간` : 'AAII 주간';
   }
-  if (key === 'margindebt') return 'YoY 변화율  ·  분기 (FRED/FINRA)';
-  if (key === 'putcall')    return ind.manual ? '수동 입력  ·  클릭하여 수정' : 'CBOE Equity P/C';
-  if (key === 'move')       return '채권시장 VIX';
-  if (key === 'hyspread')   return `ICE BofA HY  ·  FRED${ind.date ? '  ·  ' + ind.date : ''}`;
+  if (key==='margindebt') return 'YoY 변화율  ·  분기 (FRED/FINRA)';
+  if (key==='putcall')    return ind.manual ? '수동 입력  ·  클릭하여 수정' : 'CBOE Equity P/C';
+  if (key==='move')       return '채권시장 VIX';
+  if (key==='hyspread')   return `ICE BofA HY  ·  FRED${ind.date?'  ·  '+ind.date:''}`;
   return '';
 }
 
-// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-// 게이지
-// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-const GAUGE_COLORS = {
-  green: 'var(--green)', amber: 'var(--amber)', red: 'var(--red)',
-  gray: 'var(--text3)', blue: 'var(--blue)'
-};
+/* ━━━ GAUGE ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+const GCOL = { green:'var(--green)', amber:'var(--amber)', red:'var(--red)', blue:'var(--blue)', gray:'var(--text3)' };
 const GAUGE_KEYS = new Set(['feargreed','bullbear','putcall']);
-
-function renderGauge(key, ind, sig) {
-  const c = GAUGE_COLORS[sig] || 'var(--text3)';
-  if (key === 'feargreed') {
-    const pct = Math.min(100, Math.max(0, ind.value || 0));
-    return `<div class="gauge">
-      <div class="gauge-track">
-        <div class="gauge-fill" style="width:${pct}%;background:linear-gradient(90deg,var(--red) 0%,var(--amber) 40%,var(--green) 60%,var(--amber) 80%,var(--red) 100%)"></div>
-      </div>
-      <div class="gauge-labels"><span>공포 0</span><span>탐욕 100</span></div>
-    </div>`;
+function renderGauge(key, ind, s) {
+  const c = GCOL[s]||'var(--text3)';
+  if (key==='feargreed') {
+    const p = Math.min(100,Math.max(0,ind.value||0));
+    return `<div class="gauge"><div class="g-track"><div class="g-fill" style="width:${p}%;background:linear-gradient(90deg,var(--red) 0%,var(--amber) 38%,var(--green) 58%,var(--amber) 78%,var(--red) 100%)"></div></div><div class="g-lbl"><span>공포 0</span><span>탐욕 100</span></div></div>`;
   }
-  if (key === 'bullbear') {
-    const pct = Math.min(100, Math.max(0, ((ind.value || 0) + 40) / 80 * 100));
-    return `<div class="gauge">
-      <div class="gauge-track">
-        <div class="gauge-fill" style="width:${pct}%;background:${c}"></div>
-      </div>
-      <div class="gauge-labels"><span>약세 −40</span><span>강세 +40</span></div>
-    </div>`;
+  if (key==='bullbear') {
+    const p = Math.min(100,Math.max(0,((ind.value||0)+40)/80*100));
+    return `<div class="gauge"><div class="g-track"><div class="g-fill" style="width:${p}%;background:${c}"></div></div><div class="g-lbl"><span>약세 −40</span><span>강세 +40</span></div></div>`;
   }
-  if (key === 'putcall') {
-    const pct = Math.min(100, Math.max(0, ((ind.value || 0.7) - 0.3) / 1.4 * 100));
-    return `<div class="gauge">
-      <div class="gauge-track">
-        <div class="gauge-fill" style="width:${pct}%;background:${c}"></div>
-      </div>
-      <div class="gauge-labels"><span>저점 1.0↑</span><span>고점 0.5↓</span></div>
-    </div>`;
+  if (key==='putcall') {
+    const p = Math.min(100,Math.max(0,((ind.value||0.7)-0.3)/1.4*100));
+    return `<div class="gauge"><div class="g-track"><div class="g-fill" style="width:${p}%;background:${c}"></div></div><div class="g-lbl"><span>저점↑ 1.0</span><span>고점↓ 0.5</span></div></div>`;
   }
   return '';
 }
 
-// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-// Put/Call 수동 입력
-// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-function getPCManual() {
-  const v = localStorage.getItem('putcall_manual');
-  return v !== null ? parseFloat(v) : null;
-}
-function editPutCall() {
-  const cur = getPCManual();
-  const input = prompt(
-    'Put/Call Ratio 직접 입력 (CBOE Equity P/C 기준)\n예: 0.62  |  1이상 = 저점 가능  |  0.5이하 = 단기고점',
-    cur !== null ? cur : ''
-  );
-  if (input === null) return;
-  const val = parseFloat(input);
-  if (isNaN(val) || val <= 0) { alert('올바른 숫자를 입력해주세요.'); return; }
-  localStorage.setItem('putcall_manual', val);
-  loadData();
+/* ━━━ PUT/CALL MANUAL ━━━━━━━━━━━━━━━━━━━━━━━━ */
+function getPCM() { const v=localStorage.getItem('pc_manual'); return v!==null?parseFloat(v):null; }
+function editPC() {
+  const cur=getPCM();
+  const inp=prompt('Put/Call Ratio 직접 입력 (CBOE Equity P/C)\n예: 0.62  |  1.0↑ 저점가능  |  0.5↓ 단기고점', cur??'');
+  if (inp===null) return;
+  const v=parseFloat(inp);
+  if (isNaN(v)||v<=0){alert('올바른 숫자를 입력해주세요.');return;}
+  localStorage.setItem('pc_manual',v); loadData();
 }
 
-// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-// 카드 렌더
-// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+/* ━━━ CARD RENDER ━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
 function renderCard(key, ind) {
-  // Put/Call 수동값 우선
-  if (key === 'putcall') {
-    const m = getPCManual();
-    if (m !== null) ind = { ...ind, value: m, ok: true, manual: true };
-  }
-
-  const sig      = getSignal(key, ind);
-  const badgeCls = `badge badge-${sig}`;
-  const label    = BADGE_LABEL[sig];
-  const info     = fmtInfo(key, ind);
-  const criteria = CRITERIA[key] || '';
-  const errBadge = (!ind.ok && ind.value == null)
-    ? '<span class="err-badge">Actions 실행 필요</span>' : '';
-
-  const editIcon = key === 'putcall'
-    ? `<span class="edit-icon" onclick="event.stopPropagation();editPutCall()">✏</span>` : '';
-
-  const changeHtml = (key === 'putcall' && ind.manual)
-    ? `<div class="card-change"><span style="color:var(--text3)">수동 입력값</span></div>`
-    : `<div class="card-change">${fmtChange(key, ind)}</div>`;
-
-  const isClickable = key === 'putcall';
-
+  if (key==='putcall'){const m=getPCM(); if(m!==null) ind={...ind,value:m,ok:true,manual:true};}
+  const s = sig(key, ind);
+  const bCls = `badge bg-${s}`;
+  const crit = CRITERIA[key]||'';
+  const info = fmtInfo(key, ind);
+  const errBadge = (!ind.ok && ind.value==null)
+    ? '<span class="err">Actions 실행 필요</span>' : '';
+  const editIc = key==='putcall'
+    ? `<span class="edit-ic" onclick="event.stopPropagation();editPC()">✏</span>` : '';
+  const chgHtml = (key==='putcall'&&ind.manual)
+    ? `<div class="c-chg"><span class="neut">수동 입력</span></div>`
+    : `<div class="c-chg">${fmtChg(key,ind)}</div>`;
+  const isPC = key==='putcall';
   return `
-<div class="card sig-${sig}${isClickable ? ' clickable' : ''}"
-     ${isClickable ? 'onclick="editPutCall()"' : ''}>
-  <div class="card-top">
-    <span class="card-name">${ind.name}${errBadge}</span>
-    <span class="${badgeCls}">${label}</span>
+<div class="card c-${s}${isPC?' clickable':''}" ${isPC?'onclick="editPC()"':''}>
+  <div>
+    <div class="c-top">
+      <span class="c-name">${ind.name}${errBadge}</span>
+      <span class="${bCls}">${BADGE_LABEL[s]}</span>
+    </div>
+    <div class="c-val">${fmtVal(key,ind)}${editIc}</div>
+    ${info?`<div class="c-info">${info}</div>`:''}
+    ${chgHtml}
+    ${GAUGE_KEYS.has(key)?renderGauge(key,ind,s):''}
   </div>
-  <div class="card-value">${fmtValue(key, ind)}${editIcon}</div>
-  ${info  ? `<div class="card-info">${info}</div>` : ''}
-  ${changeHtml}
-  ${GAUGE_KEYS.has(key) ? renderGauge(key, ind, sig) : ''}
-  ${criteria ? `<div class="card-criteria">${criteria}</div>` : ''}
+  ${crit?`<div class="c-crit">${crit}</div>`:''}
 </div>`;
 }
 
-// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-// 전체 렌더
-// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+/* ━━━ RENDER ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
 function render(data) {
-  let sections = '';
-
-  for (const group of GROUPS) {
-    const cards = group.keys
-      .map(k => data.indicators[k] ? renderCard(k, data.indicators[k]) : '')
-      .join('');
-
-    sections += `
-<div class="section">
-  <div class="section-header">
-    <span class="section-title">${group.label}</span>
-    <span class="section-line"></span>
-  </div>
-  <div class="grid" style="grid-template-columns:repeat(${group.cols},1fr)">
-    ${cards}
-  </div>
-</div>`;
+  let grid = '';
+  for (const g of GROUPS) {
+    grid += `<div class="sec-label"><span>${g.label}</span><span class="sec-line"></span></div>`;
+    for (const k of g.keys) {
+      const ind = data.indicators[k];
+      if (ind) grid += renderCard(k, ind);
+    }
   }
 
   document.getElementById('app').innerHTML = `
-<header class="header">
-  <div class="header-brand">
-    <span class="logo">📊 매크로<span> 대시보드</span></span>
-    <span class="divider"></span>
-    <span class="subtitle">소수몽키 4강 기준 · GitHub Actions 매일 06:00 KST</span>
+<header class="hdr">
+  <div class="hdr-left">
+    <span class="hdr-title">📊 매크로 <em>대시보드</em></span>
+    <span class="hdr-sep"></span>
+    <span class="hdr-sub">소수몽키 4강 기반 판단기준  ·  매일 06:00 KST 업데이트</span>
   </div>
-  <div class="header-right">
-    <span class="update-time">${data.updated_at}</span>
-    <span class="live-dot"><span class="dot"></span>LIVE</span>
-    <button class="btn-refresh" onclick="loadData()">↺ 새로고침</button>
+  <div class="hdr-right">
+    <span class="hdr-ts">${data.updated_at}</span>
+    <span class="live"><span class="dot"></span>LIVE</span>
+    <button class="btn" onclick="loadData()">↺ 새로고침</button>
   </div>
 </header>
-
 <main class="main">
-  ${sections}
+  <div class="master-grid">${grid}</div>
 </main>
-
 <footer class="footer">
   <p>데이터 소스: yfinance · CNN Fear&amp;Greed · FRED · AAII · FINRA · CBOE<br>
-     판단기준: 소수몽키 마스터클래스 4강 · 투자 판단은 본인 책임</p>
-  <p style="text-align:right">
-    마지막 업데이트<br>
-    <strong>${data.updated_at}</strong>
-  </p>
+     판단기준: 소수몽키 마스터클래스 4강  ·  투자 판단은 본인 책임</p>
+  <p style="text-align:right">마지막 업데이트<br><strong>${data.updated_at}</strong></p>
 </footer>`;
 }
 
-// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-// 데이터 로드
-// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+/* ━━━ LOAD ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
 function loadData() {
-  fetch('data.json?t=' + Date.now())
-    .then(r => { if (!r.ok) throw new Error(r.status); return r.json(); })
+  fetch('data.json?t='+Date.now())
+    .then(r=>{ if(!r.ok) throw new Error(r.status); return r.json(); })
     .then(render)
-    .catch(err => {
-      document.getElementById('app').innerHTML = `
-<div class="loading">
-  데이터 로드 실패<br>
-  <small style="color:var(--red)">${err.message}</small><br><br>
-  <button class="btn-refresh" onclick="loadData()">다시 시도</button>
-</div>`;
+    .catch(err=>{
+      document.getElementById('app').innerHTML=`<div class="loading">
+        데이터 로드 실패<br><small style="color:var(--red)">${err.message}</small><br><br>
+        <button class="btn" onclick="loadData()">다시 시도</button>
+      </div>`;
     });
 }
-
 loadData();
 </script>
 </body>
