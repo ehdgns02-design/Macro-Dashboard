@@ -282,7 +282,7 @@ function fmtValue(key, ind) {
   if (key === 'feargreed')  return `${Math.round(v)}`;
   if (key === 'hyspread')   return `${v.toFixed(2)}<span class="card-unit">%p</span>`;
   if (key === 'bullbear')   return `${v >= 0 ? '+' : ''}${v.toFixed(1)}<span class="card-unit">%p</span>`;
-  if (key === 'margindebt') return `${v >= 0 ? '+' : ''}${v.toFixed(1)}<span class="card-unit">%</span>`;
+  if (key === 'margindebt') { const yoy = ind.yoy !== undefined ? ind.yoy : v; return `${yoy >= 0 ? '+' : ''}${yoy.toFixed(1)}<span class="card-unit">%</span>`; }
   if (key === 'putcall')    return `${v.toFixed(2)}`;
   return `${v}`;
 }
@@ -342,11 +342,39 @@ function renderGauge(key, ind, sigColor) {
 }
 
 // ──────────────────────────────────────────────
+// Put/Call 수동 입력 (localStorage)
+// ──────────────────────────────────────────────
+function getPCManual() {
+  const v = localStorage.getItem('putcall_manual');
+  return v !== null ? parseFloat(v) : null;
+}
+function setPCManual(v) {
+  localStorage.setItem('putcall_manual', v);
+}
+function editPutCall() {
+  const cur = getPCManual();
+  const input = prompt('Put/Call Ratio 값 직접 입력 (예: 0.62)\nCBOE Equity P/C 기준', cur !== null ? cur : '');
+  if (input === null) return; // 취소
+  const val = parseFloat(input);
+  if (isNaN(val) || val <= 0) { alert('올바른 숫자를 입력해주세요.'); return; }
+  setPCManual(val);
+  loadData();
+}
+
+// ──────────────────────────────────────────────
 // 카드 렌더
 // ──────────────────────────────────────────────
 const GAUGE_KEYS = new Set(['feargreed','putcall','bullbear']);
 
 function renderCard(key, ind) {
+  // Put/Call: 수동 입력값 우선 적용
+  if (key === 'putcall') {
+    const manual = getPCManual();
+    if (manual !== null) {
+      ind = { ...ind, value: manual, ok: true, manual: true };
+    }
+  }
+
   const sig = getSignal(key, ind.yoy !== undefined ? ind.yoy : ind.value);
   const [sigCls, accCls] = SIGNAL_CLASSES[sig].split(' ');
   const colorMap = { green: 'var(--green)', amber: 'var(--amber)', red: 'var(--red)', gray: 'var(--text3)' };
@@ -357,16 +385,19 @@ function renderCard(key, ind) {
   const errorBadge = (!ind.ok && ind.value === null)
     ? '<span class="error-badge">수집오류</span>' : '';
 
+  const editBtn = (key === 'putcall')
+    ? `<span onclick="editPutCall()" title="직접 입력" style="cursor:pointer;font-size:11px;color:var(--text3);margin-left:4px">✏️</span>` : '';
+
   return `
-  <div class="card">
+  <div class="card" ${key === 'putcall' ? 'onclick="editPutCall()" style="cursor:pointer"' : ''}>
     <div class="card-accent ${accCls}"></div>
     <div class="card-top">
       <span class="card-name">${ind.name}${errorBadge}</span>
       <span class="signal ${sigCls}">${SIGNAL_LABELS[sig]}</span>
     </div>
-    <div class="card-value">${fmtValue(key, ind)}</div>
+    <div class="card-value">${fmtValue(key, ind)}${editBtn}</div>
     ${sub ? `<div class="card-sub">${sub}</div>` : ''}
-    <div class="card-sub">${fmtChange(key, ind)} 전일 대비</div>
+    <div class="card-sub">${ind.manual ? '수동 입력값 · 클릭하여 수정' : fmtChange(key, ind) + ' 전일 대비'}</div>
     ${useGauge
       ? renderGauge(key, ind, sig)
       : sparkline(ind.history, sparkColor)
