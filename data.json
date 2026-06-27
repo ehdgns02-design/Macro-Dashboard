@@ -1,6 +1,6 @@
 {
-  "updated_at": "2026-06-27 13:30 KST",
-  "updated_at_unix": 1782534638,
+  "updated_at": "2026-06-27 17:06 KST",
+  "updated_at_unix": 1782547614,
   "indicators": {
     "sp500": {
       "name": "S&P 500",
@@ -107,6 +107,7 @@
       "change_pct": -0.46,
       "change_abs": -0.02,
       "history": [
+        4.586,
         4.558,
         4.493,
         4.481,
@@ -125,8 +126,7 @@
         4.469,
         4.428,
         4.463,
-        4.451,
-        4.372
+        4.451
       ],
       "ok": true
     },
@@ -199,9 +199,9 @@
       "unit": "",
       "source": "yfinance",
       "value": 18.41,
-      "prev": 18.63,
-      "change_pct": -1.18,
-      "change_abs": -0.22,
+      "prev": 18.89,
+      "change_pct": -2.54,
+      "change_abs": -0.48,
       "history": [
         15.32,
         16.05,
