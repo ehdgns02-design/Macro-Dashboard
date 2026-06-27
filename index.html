@@ -5,229 +5,238 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>매크로 지표 대시보드</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
     :root {
-      --bg:      #07090f;
-      --bg2:     #0d1117;
-      --card:    rgba(255,255,255,0.028);
-      --card-h:  rgba(255,255,255,0.052);
-      --b:       rgba(255,255,255,0.07);
-      --b2:      rgba(255,255,255,0.13);
-      --text:    #f1f3fa;
-      --text2:   #7a84a0;
-      --text3:   #3d4460;
-      --green:   #1ad49c;
-      --red:     #f0516a;
-      --amber:   #f7a928;
-      --blue:    #6094f8;
+      --bg:     #07090f;
+      --card:   rgba(255,255,255,0.032);
+      --cardh:  rgba(255,255,255,0.058);
+      --b:      rgba(255,255,255,0.08);
+      --b2:     rgba(255,255,255,0.15);
+      --text:   #eef0f8;           /* 메인 텍스트 — 밝게 */
+      --sub:    #8e98b8;           /* 서브 텍스트 */
+      --dim:    #515a7a;           /* 라벨·단위 등 */
+      --green:  #1dd4a2;
+      --red:    #f05270;
+      --amber:  #f7a828;
+      --blue:   #5f97f8;
     }
     *,*::before,*::after { box-sizing:border-box; margin:0; padding:0; }
     body {
-      font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+      font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;
       background: var(--bg);
       background-image:
-        radial-gradient(ellipse 80% 60% at 10% 0%,  rgba(96,148,248,0.045) 0%, transparent 55%),
-        radial-gradient(ellipse 60% 40% at 90% 100%, rgba(26,212,156,0.03)  0%, transparent 55%);
+        radial-gradient(ellipse 70% 50% at 5%  0%,  rgba(95,151,248,.05) 0%, transparent 55%),
+        radial-gradient(ellipse 55% 40% at 95% 100%, rgba(29,212,162,.04) 0%, transparent 55%);
       color: var(--text);
       min-height: 100vh;
       -webkit-font-smoothing: antialiased;
     }
 
-    /* ─── HEADER ─────────────────────────────── */
+    /* ── HEADER ─────────────────────────────────────── */
     .hdr {
-      position: sticky; top: 0; z-index: 99;
-      background: rgba(7,9,15,0.85);
-      backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px);
-      border-bottom: 1px solid var(--b);
-      height: 58px; padding: 0 32px;
-      display: flex; align-items: center; justify-content: space-between;
+      position:sticky; top:0; z-index:99;
+      background:rgba(7,9,15,.88);
+      backdrop-filter:blur(20px); -webkit-backdrop-filter:blur(20px);
+      border-bottom:1px solid var(--b);
+      height:60px; padding:0 32px;
+      display:flex; align-items:center; justify-content:space-between;
     }
-    .hdr-left { display:flex; align-items:center; gap:14px; }
+    .hdr-brand { display:flex; align-items:center; gap:14px; }
     .hdr-title {
-      font-size: 15px; font-weight: 700; letter-spacing: -0.4px;
+      font-size:17px; font-weight:800; letter-spacing:-.5px;
+      color:var(--text);
     }
-    .hdr-title em { color: var(--green); font-style:normal; }
-    .hdr-sep { width:1px; height:16px; background:var(--b2); }
-    .hdr-sub { font-size: 11px; color: var(--text3); font-weight:400; }
-    .hdr-right { display:flex; align-items:center; gap:12px; }
-    .hdr-ts { font-size:11px; color:var(--text3); }
+    .hdr-title em { color:var(--green); font-style:normal; }
+    .hdr-vl  { width:1px; height:18px; background:var(--b2); }
+    .hdr-sub { font-size:11.5px; color:var(--dim); }
+    .hdr-r   { display:flex; align-items:center; gap:12px; }
+    .hdr-ts  { font-size:11.5px; color:var(--dim); }
     .live {
-      display:inline-flex; align-items:center; gap:5px;
-      font-size:10.5px; font-weight:600; color:var(--green);
-      background:rgba(26,212,156,0.08); border:1px solid rgba(26,212,156,0.18);
-      padding:4px 10px; border-radius:20px;
+      display:inline-flex; align-items:center; gap:6px;
+      font-size:11px; font-weight:600; color:var(--green);
+      background:rgba(29,212,162,.1); border:1px solid rgba(29,212,162,.2);
+      padding:5px 12px; border-radius:20px;
     }
     .dot {
       width:5px; height:5px; border-radius:50%;
       background:var(--green); box-shadow:0 0 8px var(--green);
       animation:blink 2.5s ease-in-out infinite;
     }
-    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:.2} }
+    @keyframes blink{0%,100%{opacity:1}50%{opacity:.2}}
     .btn {
-      font-size:12px; font-weight:500; font-family:inherit;
-      color:var(--text2); background:rgba(255,255,255,0.05);
+      font-family:inherit; font-size:12px; font-weight:500;
+      color:var(--sub); background:rgba(255,255,255,.06);
       border:1px solid var(--b2); padding:6px 14px;
       border-radius:7px; cursor:pointer; transition:all .15s;
     }
-    .btn:hover { color:var(--text); background:rgba(255,255,255,0.09); }
+    .btn:hover { color:var(--text); background:rgba(255,255,255,.1); }
 
-    /* ─── LAYOUT ──────────────────────────────── */
+    /* ── LAYOUT ─────────────────────────────────────── */
     .main { padding:28px 32px 56px; max-width:1280px; margin:0 auto; }
 
-    /* ─── MASTER GRID ─────────────────────────── */
-    .master-grid {
-      display: grid;
-      grid-template-columns: repeat(6, 1fr);
-      gap: 10px;
-      align-items: start;
+    /* ── 6-COLUMN MASTER GRID ───────────────────────── */
+    .mgrid {
+      display:grid;
+      grid-template-columns:repeat(6,1fr);
+      gap:10px;
+      align-items:start;
     }
 
-    /* Section label spans full row */
-    .sec-label {
-      grid-column: 1 / -1;
-      margin-top: 24px;
-      margin-bottom: 2px;
-      display: flex; align-items: center; gap: 12px;
+    /* Section label — full row */
+    .sec {
+      grid-column:1/-1;
+      display:flex; align-items:center; gap:10px;
+      margin-top:28px; margin-bottom:4px;
     }
-    .sec-label:first-child { margin-top: 0; }
-    .sec-label span {
-      font-size: 9.5px; font-weight: 700;
-      letter-spacing: .14em; text-transform: uppercase;
-      color: var(--text3); white-space: nowrap;
+    .sec:first-child { margin-top:0; }
+    .sec-t {
+      font-size:11px; font-weight:700;
+      letter-spacing:.12em; text-transform:uppercase;
+      color:var(--sub);                   /* ← 이전보다 훨씬 밝게 */
+      white-space:nowrap;
     }
-    .sec-line { flex:1; height:1px; background:var(--b); }
+    .sec-l { flex:1; height:1px; background:var(--b); }
 
-    /* ─── CARD ────────────────────────────────── */
+    /* 두 개 나란한 서브-라벨 (시장지수 | 금리·환율·원자재) */
+    .sec-a {
+      grid-column:1/4;
+      display:flex; align-items:center; gap:8px;
+      margin-top:28px; margin-bottom:4px;
+    }
+    .sec-b {
+      grid-column:4/7;
+      display:flex; align-items:center; gap:8px;
+      margin-top:28px; margin-bottom:4px;
+    }
+    .sec-a:first-child,.sec-b:first-child { margin-top:0; }
+    .sec-a .sec-t,.sec-b .sec-t { font-size:11px; font-weight:700; letter-spacing:.12em; text-transform:uppercase; color:var(--sub); white-space:nowrap; }
+    .sec-a .sec-l,.sec-b .sec-l { flex:1; height:1px; background:var(--b); }
+
+    /* ── CARD ───────────────────────────────────────── */
     .card {
-      background: var(--card);
-      border: 1px solid var(--b);
-      border-top: 2px solid transparent;
-      border-radius: 12px;
-      padding: 18px 18px 16px;
-      position: relative;
-      transition: background .18s, border-color .18s, transform .18s, box-shadow .18s;
-      min-height: 160px;
-      display: flex; flex-direction: column; justify-content: space-between;
+      background:var(--card);
+      border:1px solid var(--b);
+      border-top:2px solid transparent;
+      border-radius:13px;
+      padding:18px 18px 16px;
+      min-height:154px;
+      display:flex; flex-direction:column; justify-content:space-between;
+      transition:background .18s, border-color .18s, transform .18s, box-shadow .18s;
     }
     .card:hover {
-      background: var(--card-h);
-      border-color: var(--b2);
-      transform: translateY(-2px);
-      box-shadow: 0 8px 32px rgba(0,0,0,0.35);
+      background:var(--cardh);
+      border-color:var(--b2);
+      transform:translateY(-2px);
+      box-shadow:0 10px 36px rgba(0,0,0,.38);
     }
-    .card.c-green { border-top-color: var(--green); }
-    .card.c-amber { border-top-color: var(--amber); }
-    .card.c-red   { border-top-color: var(--red); }
-    .card.c-blue  { border-top-color: var(--blue); }
-    .card.c-gray  { border-top-color: var(--text3); }
-    .card.c-green:hover { box-shadow: 0 8px 32px rgba(26,212,156,0.08); }
-    .card.c-red:hover   { box-shadow: 0 8px 32px rgba(240,81,106,0.08); }
-    .card.c-amber:hover { box-shadow: 0 8px 32px rgba(247,169,40,0.08); }
-    .card.clickable { cursor: pointer; }
+    .c-green { border-top-color:var(--green); }
+    .c-amber { border-top-color:var(--amber); }
+    .c-red   { border-top-color:var(--red);   }
+    .c-blue  { border-top-color:var(--blue);  }
+    .c-gray  { border-top-color:rgba(81,90,122,.4); }
+    .c-green:hover { box-shadow:0 10px 36px rgba(29,212,162,.09); }
+    .c-red:hover   { box-shadow:0 10px 36px rgba(240,82,112,.09); }
+    .c-amber:hover { box-shadow:0 10px 36px rgba(247,168,40,.09); }
+    .clickable { cursor:pointer; }
 
-    /* card top row */
-    .c-top { display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:12px; }
-    .c-name { font-size:11px; font-weight:500; color:var(--text2); line-height:1.4; }
-    .c-name .err { font-size:9px; background:rgba(240,81,106,.15); color:var(--red); padding:1px 5px; border-radius:3px; margin-left:4px; }
+    /* card header row */
+    .c-top { display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:10px; }
+    .c-name { font-size:11.5px; font-weight:500; color:var(--sub); line-height:1.4; }
+    .err-b  { font-size:9px; background:rgba(240,82,112,.15); color:var(--red); padding:1px 5px; border-radius:3px; margin-left:4px; }
 
     /* badge */
-    .badge {
-      font-size:9.5px; font-weight:700; letter-spacing:.04em;
-      padding:2.5px 8px; border-radius:5px; white-space:nowrap; flex-shrink:0;
-    }
-    .bg-green { background:rgba(26,212,156,.14);  color:var(--green); }
-    .bg-amber { background:rgba(247,169,40,.14);  color:var(--amber); }
-    .bg-red   { background:rgba(240,81,106,.14);  color:var(--red); }
-    .bg-blue  { background:rgba(96,148,248,.14);  color:var(--blue); }
-    .bg-gray  { background:rgba(61,68,96,.25);    color:var(--text3); }
+    .badge { font-size:10px; font-weight:700; letter-spacing:.03em; padding:3px 9px; border-radius:5px; white-space:nowrap; flex-shrink:0; }
+    .bg-green { background:rgba(29,212,162,.14);  color:var(--green); }
+    .bg-amber { background:rgba(247,168,40,.14);  color:var(--amber); }
+    .bg-red   { background:rgba(240,82,112,.14);  color:var(--red);   }
+    .bg-blue  { background:rgba(95,151,248,.14);  color:var(--blue);  }
+    .bg-gray  { background:rgba(81,90,122,.2);    color:var(--dim);   }
 
-    /* value */
+    /* value — colored by signal */
     .c-val {
-      font-size: 34px; font-weight: 800;
-      letter-spacing: -1.2px; line-height: 1;
-      color: var(--text);
-      font-variant-numeric: tabular-nums;
+      font-size:34px; font-weight:800;
+      letter-spacing:-1.2px; line-height:1;
+      font-variant-numeric:tabular-nums;
+      /* color set inline via signal */
     }
-    .c-val .u { font-size:16px; font-weight:500; color:var(--text3); letter-spacing:0; }
-    .c-val .pfx { font-size:18px; font-weight:500; color:var(--text3); margin-right:1px; }
-    .na { color:var(--text3); font-size:22px; font-weight:400; }
-    .edit-ic { font-size:13px; color:var(--text3); margin-left:6px; cursor:pointer; }
+    .c-val .u   { font-size:16px; font-weight:600; letter-spacing:0; color:inherit; opacity:.75; }
+    .c-val .pfx { font-size:17px; font-weight:600; margin-right:1px;  color:inherit; opacity:.65; }
+    .na { color:var(--dim); font-size:22px; font-weight:400; }
+    .edit-ic { font-size:13px; margin-left:6px; cursor:pointer; opacity:.6; }
 
     /* sub info */
-    .c-info { font-size:10px; color:var(--text3); line-height:1.55; margin-top:6px; }
+    .c-info { font-size:10.5px; color:var(--dim); line-height:1.55; margin-top:5px; }
 
     /* change */
-    .c-chg { font-size:11.5px; font-weight:600; margin-top:5px; font-variant-numeric:tabular-nums; }
-    .c-chg .lbl { font-size:10px; font-weight:400; color:var(--text3); margin-left:4px; }
-    .up-bad   { color:var(--red); }
-    .dn-bad   { color:var(--green); }
-    .up-good  { color:var(--green); }
-    .dn-good  { color:var(--red); }
-    .neut     { color:var(--text3); }
+    .c-chg { font-size:12px; font-weight:600; margin-top:6px; font-variant-numeric:tabular-nums; }
+    .c-chg .lbl { font-size:10.5px; font-weight:400; color:var(--dim); margin-left:5px; }
+    .up-bad  { color:var(--red);   }
+    .dn-bad  { color:var(--green); }
+    .up-good { color:var(--green); }
+    .dn-good { color:var(--red);   }
+    .neut    { color:var(--dim);   }
 
     /* criteria */
     .c-crit {
       margin-top:10px; padding-top:9px;
       border-top:1px solid var(--b);
-      font-size:9.5px; color:var(--text3); line-height:1.65;
+      font-size:10px; color:var(--dim); line-height:1.7;
     }
 
-    /* gauge */
-    .gauge { margin-top:10px; }
-    .g-track { height:3px; border-radius:2px; background:rgba(255,255,255,0.07); overflow:hidden; }
-    .g-fill  { height:100%; border-radius:2px; transition:width .7s cubic-bezier(.4,0,.2,1); }
-    .g-lbl   { display:flex; justify-content:space-between; margin-top:4px; }
-    .g-lbl span { font-size:9px; color:var(--text3); }
-
-    /* ─── FOOTER ──────────────────────────────── */
+    /* ── FOOTER ─────────────────────────────────────── */
     .footer {
-      border-top:1px solid var(--b); padding:16px 32px;
-      display:flex; justify-content:space-between;
-      align-items:center; flex-wrap:wrap; gap:10px;
+      border-top:1px solid var(--b); padding:18px 32px;
+      display:flex; justify-content:space-between; align-items:center;
+      flex-wrap:wrap; gap:10px;
     }
-    .footer p { font-size:10px; color:var(--text3); line-height:1.8; }
-    .footer strong { color:var(--text2); font-weight:500; }
+    .footer p { font-size:10.5px; color:var(--dim); line-height:1.8; }
+    .footer strong { color:var(--sub); font-weight:500; }
 
-    /* ─── LOADING ─────────────────────────────── */
-    .loading { text-align:center; padding:120px 20px; color:var(--text2); font-size:14px; }
+    /* ── LOADING ─────────────────────────────────────── */
+    .loading { text-align:center; padding:120px 20px; color:var(--sub); font-size:14px; }
 
-    /* ─── RESPONSIVE ──────────────────────────── */
-    @media (max-width:1100px) {
-      .master-grid { grid-template-columns:repeat(4,1fr); }
+    /* ── RESPONSIVE ─────────────────────────────────── */
+    @media(max-width:1100px){
+      .mgrid{ grid-template-columns:repeat(4,1fr); }
+      .sec-a,.sec-b{ grid-column:1/-1; margin-top:20px; }
     }
-    @media (max-width:720px) {
-      .master-grid { grid-template-columns:repeat(2,1fr); }
-      .main { padding:16px 14px 40px; }
-      .hdr { padding:0 16px; }
-      .hdr-sub,.hdr-ts { display:none; }
-      .footer { padding:14px 16px; }
+    @media(max-width:680px){
+      .mgrid{ grid-template-columns:repeat(2,1fr); }
+      .main{ padding:14px 12px 40px; }
+      .hdr{ padding:0 14px; }
+      .hdr-sub,.hdr-ts{ display:none; }
     }
   </style>
 </head>
 <body>
 <div id="app"><div class="loading">로딩 중…</div></div>
-
 <script>
-/* ━━━ SIGNAL CONFIG ━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+/* ━━━ 신호 판정 (소수몽키 4강) ━━━━━━━━━━━━━━━━━━━━━━ */
 const SIGNALS = {
-  sp500:      v => v == null ? 'gray':'blue',
-  nasdaq:     v => v == null ? 'gray':'blue',
-  dow:        v => v == null ? 'gray':'blue',
-  tenyear:    v => v < 3.5  ? 'green': v < 4.5  ? 'amber':'red',
-  dxy:        v => v < 100  ? 'green': v < 106  ? 'amber':'red',
-  wti:        v => v < 70   ? 'green': v < 90   ? 'amber':'red',
-  vix:        v => v < 20   ? 'green': v < 30   ? 'amber':'red',
-  move:       v => v < 100  ? 'green': v < 130  ? 'amber':'red',
-  feargreed:  v => v < 30   ? 'amber': v < 65   ? 'green':'red',
-  hyspread:   v => v < 5    ? 'green': v < 7    ? 'amber':'red',
-  bullbear:   v => v < -20  ? 'amber': v < 30   ? 'green':'red',
-  margindebt: v => v == null ? 'gray': v >= 40  ? 'red': v <= -20 ? 'amber':'green',
-  putcall:    v => v >= 1.0 ? 'amber': v <= 0.5 ? 'red':'green',
+  sp500:      v => v==null?'gray':'blue',
+  nasdaq:     v => v==null?'gray':'blue',
+  dow:        v => v==null?'gray':'blue',
+  tenyear:    v => v<3.5?'green':v<4.5?'amber':'red',
+  dxy:        v => v<100?'green':v<106?'amber':'red',
+  wti:        v => v<70?'green':v<90?'amber':'red',
+  vix:        v => v<20?'green':v<30?'amber':'red',
+  move:       v => v<100?'green':v<130?'amber':'red',
+  feargreed:  v => v<30?'amber':v<65?'green':'red',
+  hyspread:   v => v<5?'green':v<7?'amber':'red',
+  bullbear:   v => v<-20?'amber':v<30?'green':'red',
+  margindebt: v => v==null?'gray':v>=40?'red':v<=-20?'amber':'green',
+  putcall:    v => v>=1.0?'amber':v<=0.5?'red':'green',
 };
-const BADGE_LABEL = { green:'안정', amber:'주의', red:'위험', gray:'N/A', blue:'지수' };
+const BADGE_LABEL = {green:'안정',amber:'주의',red:'위험',gray:'N/A',blue:'지수'};
 
-/* ━━━ CRITERIA TEXT ━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+/* 신호 → 숫자 색상 */
+const SIG_COLOR = {
+  green:'var(--green)', amber:'var(--amber)', red:'var(--red)',
+  blue:'var(--text)',   gray:'var(--dim)',
+};
+
+/* ━━━ 판단기준 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
 const CRITERIA = {
   sp500:'', nasdaq:'', dow:'',
   tenyear:    '4.5%↑ 위험  ·  3.5%↓ 안정',
@@ -236,30 +245,36 @@ const CRITERIA = {
   vix:        '20↓ 안정  ·  20~30 고변동  ·  30↑ 위기',
   move:       '100↓ 안정  ·  130↑ 위험',
   feargreed:  '30↓ 공포 → 매수구간  ·  65↑ 탐욕 → 과열',
-  hyspread:   '5%↑ 1차 위기(15~20%↓)  ·  7%↑ 2차 위기(20%↑ 급락)',
+  hyspread:   '5%↑ 1차 위기 (15~20%↓)  ·  7%↑ 2차 위기 (급락)',
   bullbear:   '-20↓ 1차매수  ·  -30↓ 2차매수  ·  30↑ 고점(참고용)',
   margindebt: '+40%↑ 고점시그널 → 매도준비  ·  -20%↓ 저점시그널 → 매수준비',
-  putcall:    '1.0↑ 저점 가능(1년 1~2회)  ·  1.5↑ 바닥  ·  0.5↓ 단기고점',
+  putcall:    '1.0↑ 저점 가능 (1년 1~2회)  ·  1.5↑ 바닥  ·  0.5↓ 단기고점',
 };
 
-/* ━━━ GROUP ORDER ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+/* ━━━ 그룹 레이아웃 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+// sec-type: 'dual' = 두 라벨을 나란히, 'full' = 전체폭 라벨
 const GROUPS = [
-  { label:'시장 지수',             keys:['sp500','nasdaq','dow','tenyear','dxy','wti'] },
-  { label:'변동성 · 심리 · 포지션', keys:['vix','move','feargreed','putcall','bullbear'] },
-  { label:'신용 · 레버리지',        keys:['hyspread','margindebt'] },
+  { type:'dual',
+    left:  { label:'시장 지수',           keys:['sp500','nasdaq','dow'] },
+    right: { label:'금리 · 환율 · 원자재', keys:['tenyear','dxy','wti'] }
+  },
+  { type:'full', label:'변동성 · 심리 · 포지션',
+    keys:['vix','move','feargreed','putcall','bullbear'] },
+  { type:'full', label:'신용 · 레버리지',
+    keys:['hyspread','margindebt'] },
 ];
 
-/* ━━━ SIGNAL HELPER ━━━━━━━━━━━━━━━━━━━━━━━━━━ */
-function sig(key, ind) {
-  const v = (key==='margindebt' && ind.yoy!==undefined) ? ind.yoy : ind.value;
-  if (v == null) return 'gray';
+/* ━━━ 신호 계산 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+function getSig(key, ind) {
+  const v = (key==='margindebt'&&ind.yoy!==undefined) ? ind.yoy : ind.value;
+  if (v==null) return 'gray';
   return (SIGNALS[key]||(() => 'gray'))(v);
 }
 
-/* ━━━ VALUE FORMAT ━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+/* ━━━ 값 포맷 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
 function fmtVal(key, ind) {
   const v = ind.value;
-  if (v == null) return '<span class="na">—</span>';
+  if (v==null) return '<span class="na">—</span>';
   if (key==='sp500'||key==='nasdaq'||key==='dow')
     return v.toLocaleString('en-US',{maximumFractionDigits:0});
   if (key==='tenyear')  return `${v.toFixed(2)}<span class="u">%</span>`;
@@ -271,91 +286,64 @@ function fmtVal(key, ind) {
   if (key==='hyspread') return `${v.toFixed(2)}<span class="u">%p</span>`;
   if (key==='bullbear') return `${v>=0?'+':''}${v.toFixed(1)}<span class="u">%p</span>`;
   if (key==='margindebt'){
-    const y = ind.yoy!==undefined ? ind.yoy : v;
+    const y = ind.yoy!==undefined?ind.yoy:v;
     return `${y>=0?'+':''}${y.toFixed(1)}<span class="u">%</span>`;
   }
   if (key==='putcall') return v.toFixed(2);
   return `${v}`;
 }
 
-/* ━━━ CHANGE FORMAT ━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+/* ━━━ 변화량 포맷 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
 const UP_BAD  = new Set(['tenyear','dxy','vix','move','hyspread','margindebt']);
 const UP_GOOD = new Set(['sp500','nasdaq','dow','wti']);
 function fmtChg(key, ind) {
-  const ca = ind.change_abs, cp = ind.change_pct;
-  if (ca == null) return '';
-  const up    = ca >= 0;
-  const arrow = up ? '▲' : '▼';
-  const abs   = Math.abs(ca).toFixed(
-    key==='tenyear'||key==='hyspread' ? 2 :
-    key==='putcall' ? 3 : key==='feargreed' ? 1 : 2
-  );
-  const pct = (cp && cp!==0) ? ` (${up?'+':''}${cp.toFixed(1)}%)` : '';
-  let cls = 'neut';
-  if (ca!==0){
-    if (UP_BAD.has(key))  cls = up ? 'up-bad':'dn-bad';
-    if (UP_GOOD.has(key)) cls = up ? 'up-good':'dn-good';
+  const ca=ind.change_abs, cp=ind.change_pct;
+  if (ca==null) return '';
+  const up=ca>=0, ar=up?'▲':'▼';
+  const abs=Math.abs(ca).toFixed(
+    key==='tenyear'||key==='hyspread'?2:
+    key==='putcall'?3:key==='feargreed'?1:2);
+  const pct=(cp&&cp!==0)?` (${up?'+':''}${cp.toFixed(1)}%)`:'';
+  let cls='neut';
+  if(ca!==0){
+    if(UP_BAD.has(key))  cls=up?'up-bad':'dn-bad';
+    if(UP_GOOD.has(key)) cls=up?'up-good':'dn-good';
   }
-  return `<span class="${cls}">${arrow} ${abs}${pct}</span><span class="lbl">전일대비</span>`;
+  return `<span class="${cls}">${ar} ${abs}${pct}</span><span class="lbl">전일대비</span>`;
 }
 
-/* ━━━ INFO TEXT ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+/* ━━━ 서브 정보 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
 function fmtInfo(key, ind) {
-  if (key==='feargreed')  return ind.rating ? `${ind.rating}  ·  0=공포 → 100=탐욕` : '';
-  if (key==='bullbear'){
-    const b=ind.bull, be=ind.bear;
-    return (b&&be) ? `Bull ${b}%  /  Bear ${be}%  ·  AAII 주간` : 'AAII 주간';
-  }
+  if (key==='feargreed')  return ind.rating?`${ind.rating}  ·  0=공포 → 100=탐욕`:'';
+  if (key==='bullbear'){const b=ind.bull,be=ind.bear; return(b&&be)?`Bull ${b}% / Bear ${be}%  ·  AAII 주간`:'AAII 주간';}
   if (key==='margindebt') return 'YoY 변화율  ·  분기 (FRED/FINRA)';
-  if (key==='putcall')    return ind.manual ? '수동 입력  ·  클릭하여 수정' : 'CBOE Equity P/C';
+  if (key==='putcall')    return ind.manual?'수동 입력  ·  클릭하여 수정':'CBOE Equity P/C';
   if (key==='move')       return '채권시장 VIX';
   if (key==='hyspread')   return `ICE BofA HY  ·  FRED${ind.date?'  ·  '+ind.date:''}`;
   return '';
 }
 
-/* ━━━ GAUGE ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
-const GCOL = { green:'var(--green)', amber:'var(--amber)', red:'var(--red)', blue:'var(--blue)', gray:'var(--text3)' };
-const GAUGE_KEYS = new Set(['feargreed','bullbear','putcall']);
-function renderGauge(key, ind, s) {
-  const c = GCOL[s]||'var(--text3)';
-  if (key==='feargreed') {
-    const p = Math.min(100,Math.max(0,ind.value||0));
-    return `<div class="gauge"><div class="g-track"><div class="g-fill" style="width:${p}%;background:linear-gradient(90deg,var(--red) 0%,var(--amber) 38%,var(--green) 58%,var(--amber) 78%,var(--red) 100%)"></div></div><div class="g-lbl"><span>공포 0</span><span>탐욕 100</span></div></div>`;
-  }
-  if (key==='bullbear') {
-    const p = Math.min(100,Math.max(0,((ind.value||0)+40)/80*100));
-    return `<div class="gauge"><div class="g-track"><div class="g-fill" style="width:${p}%;background:${c}"></div></div><div class="g-lbl"><span>약세 −40</span><span>강세 +40</span></div></div>`;
-  }
-  if (key==='putcall') {
-    const p = Math.min(100,Math.max(0,((ind.value||0.7)-0.3)/1.4*100));
-    return `<div class="gauge"><div class="g-track"><div class="g-fill" style="width:${p}%;background:${c}"></div></div><div class="g-lbl"><span>저점↑ 1.0</span><span>고점↓ 0.5</span></div></div>`;
-  }
-  return '';
-}
-
-/* ━━━ PUT/CALL MANUAL ━━━━━━━━━━━━━━━━━━━━━━━━ */
-function getPCM() { const v=localStorage.getItem('pc_manual'); return v!==null?parseFloat(v):null; }
-function editPC() {
+/* ━━━ Put/Call 수동 입력 ━━━━━━━━━━━━━━━━━━━━━━━━━ */
+function getPCM(){const v=localStorage.getItem('pc_m');return v!==null?parseFloat(v):null;}
+function editPC(){
   const cur=getPCM();
-  const inp=prompt('Put/Call Ratio 직접 입력 (CBOE Equity P/C)\n예: 0.62  |  1.0↑ 저점가능  |  0.5↓ 단기고점', cur??'');
-  if (inp===null) return;
+  const inp=prompt('Put/Call Ratio 직접 입력 (CBOE Equity P/C)\n예: 0.62  |  1.0↑ 저점  |  0.5↓ 단기고점',cur??'');
+  if(inp===null)return;
   const v=parseFloat(inp);
-  if (isNaN(v)||v<=0){alert('올바른 숫자를 입력해주세요.');return;}
-  localStorage.setItem('pc_manual',v); loadData();
+  if(isNaN(v)||v<=0){alert('올바른 숫자를 입력해주세요.');return;}
+  localStorage.setItem('pc_m',v); loadData();
 }
 
-/* ━━━ CARD RENDER ━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+/* ━━━ 카드 렌더 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
 function renderCard(key, ind) {
-  if (key==='putcall'){const m=getPCM(); if(m!==null) ind={...ind,value:m,ok:true,manual:true};}
-  const s = sig(key, ind);
-  const bCls = `badge bg-${s}`;
+  if(key==='putcall'){const m=getPCM();if(m!==null)ind={...ind,value:m,ok:true,manual:true};}
+  const s   = getSig(key, ind);
+  const col = SIG_COLOR[s];
   const crit = CRITERIA[key]||'';
   const info = fmtInfo(key, ind);
-  const errBadge = (!ind.ok && ind.value==null)
-    ? '<span class="err">Actions 실행 필요</span>' : '';
-  const editIc = key==='putcall'
-    ? `<span class="edit-ic" onclick="event.stopPropagation();editPC()">✏</span>` : '';
-  const chgHtml = (key==='putcall'&&ind.manual)
+  const err  = (!ind.ok&&ind.value==null)?'<span class="err-b">Actions 실행 필요</span>':'';
+  const eid  = key==='putcall'?`<span class="edit-ic" onclick="event.stopPropagation();editPC()">✏</span>`:'';
+  const chg  = (key==='putcall'&&ind.manual)
     ? `<div class="c-chg"><span class="neut">수동 입력</span></div>`
     : `<div class="c-chg">${fmtChg(key,ind)}</div>`;
   const isPC = key==='putcall';
@@ -363,44 +351,55 @@ function renderCard(key, ind) {
 <div class="card c-${s}${isPC?' clickable':''}" ${isPC?'onclick="editPC()"':''}>
   <div>
     <div class="c-top">
-      <span class="c-name">${ind.name}${errBadge}</span>
-      <span class="${bCls}">${BADGE_LABEL[s]}</span>
+      <span class="c-name">${ind.name}${err}</span>
+      <span class="badge bg-${s}">${BADGE_LABEL[s]}</span>
     </div>
-    <div class="c-val">${fmtVal(key,ind)}${editIc}</div>
+    <div class="c-val" style="color:${col}">${fmtVal(key,ind)}${eid}</div>
     ${info?`<div class="c-info">${info}</div>`:''}
-    ${chgHtml}
-    ${GAUGE_KEYS.has(key)?renderGauge(key,ind,s):''}
+    ${chg}
   </div>
   ${crit?`<div class="c-crit">${crit}</div>`:''}
 </div>`;
 }
 
-/* ━━━ RENDER ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+/* ━━━ 전체 렌더 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
 function render(data) {
+  const inds = data.indicators;
   let grid = '';
+
   for (const g of GROUPS) {
-    grid += `<div class="sec-label"><span>${g.label}</span><span class="sec-line"></span></div>`;
-    for (const k of g.keys) {
-      const ind = data.indicators[k];
-      if (ind) grid += renderCard(k, ind);
+    if (g.type === 'dual') {
+      /* 두 서브라벨을 나란히 배치 */
+      grid += `
+<div class="sec-a"><span class="sec-t">${g.left.label}</span><span class="sec-l"></span></div>
+<div class="sec-b"><span class="sec-t">${g.right.label}</span><span class="sec-l"></span></div>`;
+      for (const k of [...g.left.keys, ...g.right.keys]) {
+        if (inds[k]) grid += renderCard(k, inds[k]);
+      }
+    } else {
+      /* 전체폭 라벨 */
+      grid += `<div class="sec"><span class="sec-t">${g.label}</span><span class="sec-l"></span></div>`;
+      for (const k of g.keys) {
+        if (inds[k]) grid += renderCard(k, inds[k]);
+      }
     }
   }
 
   document.getElementById('app').innerHTML = `
 <header class="hdr">
-  <div class="hdr-left">
+  <div class="hdr-brand">
     <span class="hdr-title">📊 매크로 <em>대시보드</em></span>
-    <span class="hdr-sep"></span>
-    <span class="hdr-sub">소수몽키 4강 기반 판단기준  ·  매일 06:00 KST 업데이트</span>
+    <span class="hdr-vl"></span>
+    <span class="hdr-sub">소수몽키 4강 기준  ·  매일 06:00 KST</span>
   </div>
-  <div class="hdr-right">
+  <div class="hdr-r">
     <span class="hdr-ts">${data.updated_at}</span>
     <span class="live"><span class="dot"></span>LIVE</span>
     <button class="btn" onclick="loadData()">↺ 새로고침</button>
   </div>
 </header>
 <main class="main">
-  <div class="master-grid">${grid}</div>
+  <div class="mgrid">${grid}</div>
 </main>
 <footer class="footer">
   <p>데이터 소스: yfinance · CNN Fear&amp;Greed · FRED · AAII · FINRA · CBOE<br>
@@ -409,10 +408,10 @@ function render(data) {
 </footer>`;
 }
 
-/* ━━━ LOAD ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+/* ━━━ 데이터 로드 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
 function loadData() {
   fetch('data.json?t='+Date.now())
-    .then(r=>{ if(!r.ok) throw new Error(r.status); return r.json(); })
+    .then(r=>{if(!r.ok)throw new Error(r.status);return r.json();})
     .then(render)
     .catch(err=>{
       document.getElementById('app').innerHTML=`<div class="loading">
