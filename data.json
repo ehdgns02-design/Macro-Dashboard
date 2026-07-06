@@ -1,6 +1,6 @@
 {
-  "updated_at": "2026-07-05 17:24 KST",
-  "updated_at_unix": 1783239879,
+  "updated_at": "2026-07-06 21:16 KST",
+  "updated_at_unix": 1783340179,
   "indicators": {
     "sp500": {
       "name": "S&P 500",
@@ -39,9 +39,9 @@
       "unit": "",
       "source": "yfinance",
       "value": 25832.672,
-      "prev": 26040.031,
+      "prev": 26040.0,
       "change_pct": -0.8,
-      "change_abs": -207.359,
+      "change_abs": -207.328,
       "history": [
         26830.961,
         25709.43,
@@ -71,9 +71,9 @@
       "unit": "",
       "source": "yfinance",
       "value": 52900.07,
-      "prev": 52305.24,
+      "prev": 52305.2,
       "change_pct": 1.14,
-      "change_abs": 594.83,
+      "change_abs": 594.87,
       "history": [
         51561.93,
         50866.781,
@@ -104,8 +104,8 @@
       "source": "yfinance",
       "value": 4.485,
       "prev": 4.485,
-      "change_pct": 0.0,
-      "change_abs": 0.0,
+      "change_pct": -0.0,
+      "change_abs": -0.0,
       "history": [
         4.477,
         4.536,
@@ -134,12 +134,11 @@
       "name": "달러인덱스 (DXY)",
       "unit": "",
       "source": "yfinance",
-      "value": 100.857,
+      "value": 101.064,
       "prev": 100.857,
-      "change_pct": 0.0,
-      "change_abs": 0.0,
+      "change_pct": 0.21,
+      "change_abs": 0.207,
       "history": [
-        99.41,
         100.07,
         100.05,
         99.91,
@@ -158,7 +157,8 @@
         101.11,
         101.19,
         101.39,
-        100.86
+        100.86,
+        101.065
       ],
       "ok": true
     },
@@ -166,10 +166,10 @@
       "name": "유가 (WTI)",
       "unit": "USD",
       "source": "yfinance",
-      "value": 68.78,
+      "value": 68.61,
       "prev": 68.69,
-      "change_pct": 0.13,
-      "change_abs": 0.09,
+      "change_pct": -0.12,
+      "change_abs": -0.08,
       "history": [
         90.54,
         91.3,
@@ -190,7 +190,7 @@
         69.5,
         68.58,
         68.69,
-        68.78
+        68.61
       ],
       "ok": true
     },
@@ -198,12 +198,11 @@
       "name": "VIX 지수",
       "unit": "",
       "source": "yfinance",
-      "value": 15.81,
-      "prev": 16.15,
-      "change_pct": -2.11,
-      "change_abs": -0.34,
+      "value": 16.41,
+      "prev": 15.81,
+      "change_pct": 3.8,
+      "change_abs": 0.6,
       "history": [
-        15.4,
         21.51,
         18.92,
         19.87,
@@ -222,7 +221,8 @@
         17.65,
         16.45,
         16.59,
-        16.15
+        16.15,
+        16.41
       ],
       "ok": true
     },
@@ -262,12 +262,11 @@
       "name": "공포탐욕지수 (CNN)",
       "unit": "",
       "source": "CNN",
-      "value": 31.9,
+      "value": 34.1,
       "rating": "fear",
-      "change_abs": -2.2,
+      "change_abs": 0.0,
       "change_pct": 0,
       "history": [
-        32.5,
         26.9,
         31.6,
         35.5,
@@ -286,7 +285,8 @@
         30.5,
         34.1,
         34.1,
-        31.9
+        34.1,
+        34.1
       ],
       "ok": true
     },
@@ -386,11 +386,11 @@
       "name": "Put/Call Ratio",
       "unit": "",
       "source": "CBOE",
-      "value": 0.894,
+      "value": 0.898,
       "change_abs": 0,
       "change_pct": 0,
       "history": [],
-      "note": "SPY 4 expiry (put 1,103,580 / call 1,234,035)",
+      "note": "SPY 4 expiry (put 1,109,784 / call 1,236,484)",
       "ok": true
     }
   }
