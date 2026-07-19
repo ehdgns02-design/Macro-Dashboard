@@ -1,6 +1,6 @@
 {
-  "updated_at": "2026-07-19 06:45 KST",
-  "updated_at_unix": 1784411150,
+  "updated_at": "2026-07-20 06:47 KST",
+  "updated_at_unix": 1784497665,
   "indicators": {
     "sp500": {
       "name": "S&P 500",
@@ -39,9 +39,9 @@
       "unit": "",
       "source": "yfinance",
       "value": 25520.244,
-      "prev": 25881.947,
+      "prev": 25881.9,
       "change_pct": -1.4,
-      "change_abs": -361.703,
+      "change_abs": -361.656,
       "history": [
         26517.93,
         26166.6,
@@ -71,9 +71,9 @@
       "unit": "",
       "source": "yfinance",
       "value": 52146.42,
-      "prev": 52552.97,
+      "prev": 52553.0,
       "change_pct": -0.77,
-      "change_abs": -406.55,
+      "change_abs": -406.58,
       "history": [
         51564.699,
         51712.711,
@@ -167,9 +167,9 @@
       "unit": "USD",
       "source": "yfinance",
       "value": 81.78,
-      "prev": 78.28,
-      "change_pct": 4.47,
-      "change_abs": 3.5,
+      "prev": 81.78,
+      "change_pct": 0.0,
+      "change_abs": 0.0,
       "history": [
         76.6,
         74.82,
@@ -190,7 +190,7 @@
         79.34,
         79.6,
         78.95,
-        82.49
+        81.78
       ],
       "ok": true
     },
@@ -235,11 +235,6 @@
       "change_pct": 3.99,
       "change_abs": 2.7182,
       "history": [
-        69.45,
-        69.36,
-        69.38,
-        67.28,
-        70.66,
         65.39,
         70.02,
         68.78,
@@ -254,7 +249,12 @@
         70.25,
         72.41,
         68.89,
-        69.55
+        69.55,
+        77.77,
+        75.03,
+        68.48,
+        68.16,
+        70.88
       ],
       "ok": true
     },
@@ -386,11 +386,11 @@
       "name": "Put/Call Ratio",
       "unit": "",
       "source": "CBOE",
-      "value": 1.128,
+      "value": 1.12,
       "change_abs": 0,
       "change_pct": 0,
       "history": [],
-      "note": "SPY 4 expiry (put 1,191,702 / call 1,056,725)",
+      "note": "SPY 4 expiry (put 1,193,793 / call 1,065,638)",
       "ok": true
     }
   }
