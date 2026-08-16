@@ -1,6 +1,6 @@
 {
-  "updated_at": "2026-08-16 06:16 KST",
-  "updated_at_unix": 1786828577,
+  "updated_at": "2026-08-17 06:15 KST",
+  "updated_at_unix": 1786914925,
   "indicators": {
     "sp500": {
       "name": "S&P 500",
@@ -39,9 +39,9 @@
       "unit": "",
       "source": "yfinance",
       "value": 26729.164,
-      "prev": 26803.025,
+      "prev": 26803.0,
       "change_pct": -0.28,
-      "change_abs": -73.861,
+      "change_abs": -73.836,
       "history": [
         26269.23,
         25881.949,
@@ -71,9 +71,9 @@
       "unit": "",
       "source": "yfinance",
       "value": 53732.41,
-      "prev": 53839.99,
+      "prev": 53840.0,
       "change_pct": -0.2,
-      "change_abs": -107.58,
+      "change_abs": -107.59,
       "history": [
         52658.641,
         52552.969,
@@ -163,9 +163,9 @@
       "unit": "USD",
       "source": "yfinance",
       "value": 82.4,
-      "prev": 81.25,
-      "change_pct": 1.42,
-      "change_abs": 1.15,
+      "prev": 82.4,
+      "change_pct": 0.0,
+      "change_abs": 0.0,
       "history": [
         83.23,
         84.91,
