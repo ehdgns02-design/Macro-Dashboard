@@ -1,6 +1,6 @@
 {
-  "updated_at": "2026-08-23 06:17 KST",
-  "updated_at_unix": 1787433436,
+  "updated_at": "2026-08-24 06:16 KST",
+  "updated_at_unix": 1787519814,
   "indicators": {
     "sp500": {
       "name": "S&P 500",
@@ -39,9 +39,9 @@
       "unit": "",
       "source": "yfinance",
       "value": 26180.455,
-      "prev": 26067.166,
+      "prev": 26067.2,
       "change_pct": 0.43,
-      "change_abs": 113.289,
+      "change_abs": 113.255,
       "history": [
         24932.08,
         24876.91,
@@ -167,9 +167,9 @@
       "unit": "USD",
       "source": "yfinance",
       "value": 87.06,
-      "prev": 86.83,
-      "change_pct": 0.26,
-      "change_abs": 0.23,
+      "prev": 87.06,
+      "change_pct": 0.0,
+      "change_abs": 0.0,
       "history": [
         82.61,
         79.26,
@@ -231,9 +231,9 @@
       "unit": "",
       "source": "yfinance",
       "value": 73.399,
-      "prev": 73.18,
+      "prev": 73.177,
       "change_pct": 0.3,
-      "change_abs": 0.2188,
+      "change_abs": 0.2218,
       "history": [
         77.21,
         76.09,
@@ -386,11 +386,11 @@
       "name": "Put/Call Ratio",
       "unit": "",
       "source": "CBOE",
-      "value": 1.246,
+      "value": 1.223,
       "change_abs": 0,
       "change_pct": 0,
       "history": [],
-      "note": "SPY 4 expiry (put 787,540 / call 631,843)",
+      "note": "SPY 4 expiry (put 798,460 / call 653,079)",
       "ok": true
     }
   }
