@@ -1,6 +1,6 @@
 {
-  "updated_at": "2026-08-29 12:02 KST",
-  "updated_at_unix": 1787972556,
+  "updated_at": "2026-08-30 07:58 KST",
+  "updated_at_unix": 1788044282,
   "indicators": {
     "sp500": {
       "name": "S&P 500",
@@ -62,7 +62,7 @@
         26151.301,
         26130.199,
         26541.35,
-        26402.424
+        26402.42
       ],
       "ok": true
     },
@@ -71,9 +71,9 @@
       "unit": "",
       "source": "yfinance",
       "value": 53559.99,
-      "prev": 53569.44,
+      "prev": 53569.4,
       "change_pct": -0.02,
-      "change_abs": -9.45,
+      "change_abs": -9.41,
       "history": [
         53178.41,
         54085.879,
@@ -158,7 +158,7 @@
         98.92,
         99.17,
         99.16,
-        99.677
+        99.7
       ],
       "ok": true
     },
@@ -166,10 +166,10 @@
       "name": "유가 (WTI)",
       "unit": "USD",
       "source": "yfinance",
-      "value": 83.44,
+      "value": 83.4,
       "prev": 83.53,
-      "change_pct": -0.11,
-      "change_abs": -0.09,
+      "change_pct": -0.16,
+      "change_abs": -0.13,
       "history": [
         80.34,
         75.77,
@@ -190,7 +190,7 @@
         82.36,
         82.23,
         83.53,
-        83.44
+        83.4
       ],
       "ok": true
     },
@@ -231,9 +231,9 @@
       "unit": "",
       "source": "yfinance",
       "value": 70.966,
-      "prev": 69.859,
+      "prev": 69.86,
       "change_pct": 1.58,
-      "change_abs": 1.1067,
+      "change_abs": 1.1055,
       "history": [
         80.48,
         77.56,
@@ -254,7 +254,7 @@
         71.92,
         69.44,
         69.86,
-        70.965
+        70.97
       ],
       "ok": true
     },
@@ -390,7 +390,7 @@
       "change_abs": 0,
       "change_pct": 0,
       "history": [],
-      "note": "SPY 4 expiry (put 1,001,484 / call 977,448)",
+      "note": "SPY 4 expiry (put 1,001,484 / call 977,455)",
       "ok": true
     }
   }
