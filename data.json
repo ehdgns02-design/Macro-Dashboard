@@ -1,6 +1,6 @@
 {
-  "updated_at": "2026-08-30 07:58 KST",
-  "updated_at_unix": 1788044282,
+  "updated_at": "2026-08-31 08:06 KST",
+  "updated_at_unix": 1788131163,
   "indicators": {
     "sp500": {
       "name": "S&P 500",
@@ -39,9 +39,9 @@
       "unit": "",
       "source": "yfinance",
       "value": 26402.424,
-      "prev": 26541.352,
+      "prev": 26541.4,
       "change_pct": -0.52,
-      "change_abs": -138.928,
+      "change_abs": -138.976,
       "history": [
         25913.9,
         26584.99,
@@ -134,12 +134,11 @@
       "name": "달러인덱스 (DXY)",
       "unit": "",
       "source": "yfinance",
-      "value": 99.677,
+      "value": 99.674,
       "prev": 99.702,
       "change_pct": -0.03,
-      "change_abs": -0.025,
+      "change_abs": -0.028,
       "history": [
-        99.96,
         99.89,
         99.69,
         99.97,
@@ -158,7 +157,8 @@
         98.92,
         99.17,
         99.16,
-        99.7
+        99.7,
+        99.674
       ],
       "ok": true
     },
@@ -166,12 +166,11 @@
       "name": "유가 (WTI)",
       "unit": "USD",
       "source": "yfinance",
-      "value": 83.4,
-      "prev": 83.53,
-      "change_pct": -0.16,
-      "change_abs": -0.13,
+      "value": 84.88,
+      "prev": 83.4,
+      "change_pct": 1.77,
+      "change_abs": 1.48,
       "history": [
-        80.34,
         75.77,
         75.22,
         77.29,
@@ -190,7 +189,8 @@
         82.36,
         82.23,
         83.53,
-        83.4
+        83.4,
+        84.88
       ],
       "ok": true
     },
@@ -231,9 +231,9 @@
       "unit": "",
       "source": "yfinance",
       "value": 70.966,
-      "prev": 69.86,
+      "prev": 69.859,
       "change_pct": 1.58,
-      "change_abs": 1.1055,
+      "change_abs": 1.1067,
       "history": [
         80.48,
         77.56,
@@ -390,7 +390,7 @@
       "change_abs": 0,
       "change_pct": 0,
       "history": [],
-      "note": "SPY 4 expiry (put 1,001,484 / call 977,455)",
+      "note": "SPY 4 expiry (put 1,001,484 / call 977,448)",
       "ok": true
     }
   }
