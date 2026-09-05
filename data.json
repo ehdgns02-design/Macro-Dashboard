@@ -1,6 +1,6 @@
 {
-  "updated_at": "2026-09-05 07:44 KST",
-  "updated_at_unix": 1788561897,
+  "updated_at": "2026-09-06 07:37 KST",
+  "updated_at_unix": 1788647831,
   "indicators": {
     "sp500": {
       "name": "S&P 500",
@@ -39,9 +39,9 @@
       "unit": "",
       "source": "yfinance",
       "value": 26506.99,
-      "prev": 26584.06,
+      "prev": 26584.1,
       "change_pct": -0.29,
-      "change_abs": -77.07,
+      "change_abs": -77.11,
       "history": [
         26605.359,
         26445.449,
@@ -71,9 +71,9 @@
       "unit": "",
       "source": "yfinance",
       "value": 53414.25,
-      "prev": 53686.11,
+      "prev": 53686.1,
       "change_pct": -0.51,
-      "change_abs": -271.86,
+      "change_abs": -271.85,
       "history": [
         53975.98,
         53791.852,
@@ -135,9 +135,9 @@
       "unit": "",
       "source": "yfinance",
       "value": 99.157,
-      "prev": 98.908,
-      "change_pct": 0.25,
-      "change_abs": 0.249,
+      "prev": 99.176,
+      "change_pct": -0.02,
+      "change_abs": -0.019,
       "history": [
         99.81,
         99.82,
@@ -158,7 +158,7 @@
         99.67,
         99.56,
         99.0,
-        99.157
+        99.16
       ],
       "ok": true
     },
@@ -166,10 +166,10 @@
       "name": "유가 (WTI)",
       "unit": "USD",
       "source": "yfinance",
-      "value": 91.22,
+      "value": 91.48,
       "prev": 91.3,
-      "change_pct": -0.09,
-      "change_abs": -0.08,
+      "change_pct": 0.2,
+      "change_abs": 0.18,
       "history": [
         82.13,
         83.2,
@@ -190,7 +190,7 @@
         90.22,
         91.01,
         91.3,
-        91.22
+        91.48
       ],
       "ok": true
     },
@@ -231,9 +231,9 @@
       "unit": "",
       "source": "yfinance",
       "value": 73.105,
-      "prev": 74.681,
+      "prev": 74.68,
       "change_pct": -2.11,
-      "change_abs": -1.5767,
+      "change_abs": -1.5755,
       "history": [
         75.46,
         77.92,
@@ -254,7 +254,7 @@
         77.88,
         79.71,
         74.68,
-        73.104
+        73.1
       ],
       "ok": true
     },
@@ -386,11 +386,11 @@
       "name": "Put/Call Ratio",
       "unit": "",
       "source": "CBOE",
-      "value": 1.133,
+      "value": 1.279,
       "change_abs": 0,
       "change_pct": 0,
       "history": [],
-      "note": "SPY 4 expiry (put 4,609,792 / call 4,067,990)",
+      "note": "SPY 4 expiry (put 1,011,275 / call 790,421)",
       "ok": true
     }
   }
