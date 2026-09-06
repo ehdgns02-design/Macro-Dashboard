@@ -1,6 +1,6 @@
 {
-  "updated_at": "2026-09-06 07:37 KST",
-  "updated_at_unix": 1788647831,
+  "updated_at": "2026-09-07 07:39 KST",
+  "updated_at_unix": 1788734344,
   "indicators": {
     "sp500": {
       "name": "S&P 500",
@@ -139,7 +139,6 @@
       "change_pct": -0.02,
       "change_abs": -0.019,
       "history": [
-        99.81,
         99.82,
         100.01,
         99.96,
@@ -158,7 +157,8 @@
         99.67,
         99.56,
         99.0,
-        99.16
+        99.16,
+        99.157
       ],
       "ok": true
     },
@@ -167,11 +167,10 @@
       "unit": "USD",
       "source": "yfinance",
       "value": 91.48,
-      "prev": 91.3,
-      "change_pct": 0.2,
-      "change_abs": 0.18,
+      "prev": 91.48,
+      "change_pct": 0.0,
+      "change_abs": 0.0,
       "history": [
-        82.13,
         83.2,
         83.27,
         81.25,
@@ -190,6 +189,7 @@
         90.22,
         91.01,
         91.3,
+        91.48,
         91.48
       ],
       "ok": true
