@@ -1,6 +1,6 @@
 {
-  "updated_at": "2026-09-07 07:39 KST",
-  "updated_at_unix": 1788734344,
+  "updated_at": "2026-09-08 08:15 KST",
+  "updated_at_unix": 1788822925,
   "indicators": {
     "sp500": {
       "name": "S&P 500",
@@ -103,9 +103,9 @@
       "unit": "%",
       "source": "yfinance",
       "value": 4.784,
-      "prev": 4.762,
-      "change_pct": 0.46,
-      "change_abs": 0.022,
+      "prev": 4.784,
+      "change_pct": 0.0,
+      "change_abs": 0.0,
       "history": [
         4.699,
         4.684,
@@ -134,10 +134,10 @@
       "name": "달러인덱스 (DXY)",
       "unit": "",
       "source": "yfinance",
-      "value": 99.157,
+      "value": 99.176,
       "prev": 99.176,
-      "change_pct": -0.02,
-      "change_abs": -0.019,
+      "change_pct": 0.0,
+      "change_abs": 0.0,
       "history": [
         99.82,
         100.01,
@@ -158,7 +158,7 @@
         99.56,
         99.0,
         99.16,
-        99.157
+        99.176
       ],
       "ok": true
     },
@@ -166,10 +166,10 @@
       "name": "유가 (WTI)",
       "unit": "USD",
       "source": "yfinance",
-      "value": 91.48,
+      "value": 92.63,
       "prev": 91.48,
-      "change_pct": 0.0,
-      "change_abs": 0.0,
+      "change_pct": 1.26,
+      "change_abs": 1.15,
       "history": [
         83.2,
         83.27,
@@ -190,7 +190,7 @@
         91.01,
         91.3,
         91.48,
-        91.48
+        92.63
       ],
       "ok": true
     },
@@ -198,12 +198,11 @@
       "name": "VIX 지수",
       "unit": "",
       "source": "yfinance",
-      "value": 14.53,
-      "prev": 14.32,
-      "change_pct": 1.47,
-      "change_abs": 0.21,
+      "value": 15.3,
+      "prev": 14.53,
+      "change_pct": 5.3,
+      "change_abs": 0.77,
       "history": [
-        15.46,
         15.28,
         14.55,
         14.63,
@@ -222,7 +221,8 @@
         16.34,
         15.2,
         14.32,
-        14.53
+        14.53,
+        15.3
       ],
       "ok": true
     },
