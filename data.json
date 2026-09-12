@@ -1,6 +1,6 @@
 {
-  "updated_at": "2026-09-12 07:56 KST",
-  "updated_at_unix": 1789167411,
+  "updated_at": "2026-09-13 07:48 KST",
+  "updated_at_unix": 1789253283,
   "indicators": {
     "sp500": {
       "name": "S&P 500",
@@ -62,7 +62,7 @@
         26421.41,
         26253.34,
         26081.721,
-        26333.035
+        26333.039
       ],
       "ok": true
     },
@@ -135,9 +135,9 @@
       "unit": "",
       "source": "yfinance",
       "value": 99.095,
-      "prev": 99.048,
-      "change_pct": 0.05,
-      "change_abs": 0.047,
+      "prev": 99.122,
+      "change_pct": -0.03,
+      "change_abs": -0.027,
       "history": [
         99.67,
         99.64,
@@ -158,7 +158,7 @@
         98.84,
         98.77,
         99.09,
-        99.095
+        99.12
       ],
       "ok": true
     },
@@ -166,10 +166,10 @@
       "name": "유가 (WTI)",
       "unit": "USD",
       "source": "yfinance",
-      "value": 99.99,
+      "value": 100.05,
       "prev": 102.48,
-      "change_pct": -2.43,
-      "change_abs": -2.49,
+      "change_pct": -2.37,
+      "change_abs": -2.43,
       "history": [
         82.4,
         84.5,
@@ -190,7 +190,7 @@
         93.03,
         96.05,
         102.48,
-        99.99
+        100.05
       ],
       "ok": true
     },
@@ -199,9 +199,9 @@
       "unit": "",
       "source": "yfinance",
       "value": 15.84,
-      "prev": 16.46,
-      "change_pct": -3.77,
-      "change_abs": -0.62,
+      "prev": 17.84,
+      "change_pct": -11.21,
+      "change_abs": -2.0,
       "history": [
         15.19,
         15.84,
@@ -254,7 +254,7 @@
         76.14,
         76.74,
         82.09,
-        82.207
+        82.21
       ],
       "ok": true
     },
@@ -386,11 +386,11 @@
       "name": "Put/Call Ratio",
       "unit": "",
       "source": "CBOE",
-      "value": 1.247,
+      "value": 1.537,
       "change_abs": 0,
       "change_pct": 0,
       "history": [],
-      "note": "SPY 4 expiry (put 4,238,353 / call 3,398,785)",
+      "note": "SPY 4 expiry (put 325,258 / call 211,602)",
       "ok": true
     }
   }
