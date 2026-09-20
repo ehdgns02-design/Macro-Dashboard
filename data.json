@@ -1,6 +1,6 @@
 {
-  "updated_at": "2026-09-20 07:37 KST",
-  "updated_at_unix": 1789857478,
+  "updated_at": "2026-09-21 07:55 KST",
+  "updated_at_unix": 1789944912,
   "indicators": {
     "sp500": {
       "name": "S&P 500",
@@ -71,9 +71,9 @@
       "unit": "",
       "source": "yfinance",
       "value": 51682.64,
-      "prev": 51778.04,
+      "prev": 51778.0,
       "change_pct": -0.18,
-      "change_abs": -95.4,
+      "change_abs": -95.36,
       "history": [
         53277.012,
         53417.16,
@@ -134,12 +134,11 @@
       "name": "달러인덱스 (DXY)",
       "unit": "",
       "source": "yfinance",
-      "value": 100.215,
+      "value": 100.249,
       "prev": 100.222,
-      "change_pct": -0.01,
-      "change_abs": -0.007,
+      "change_pct": 0.03,
+      "change_abs": 0.027,
       "history": [
-        98.8,
         99.0,
         98.92,
         99.17,
@@ -158,7 +157,8 @@
         99.65,
         100.31,
         100.22,
-        100.22
+        100.22,
+        100.249
       ],
       "ok": true
     },
@@ -167,11 +167,10 @@
       "unit": "USD",
       "source": "yfinance",
       "value": 96.08,
-      "prev": 97.23,
-      "change_pct": -1.18,
-      "change_abs": -1.15,
+      "prev": 96.08,
+      "change_pct": 0.0,
+      "change_abs": 0.0,
       "history": [
-        87.06,
         85.01,
         82.36,
         82.23,
@@ -190,7 +189,8 @@
         105.83,
         102.43,
         101.91,
-        100.3
+        100.3,
+        96.09
       ],
       "ok": true
     },
@@ -386,11 +386,11 @@
       "name": "Put/Call Ratio",
       "unit": "",
       "source": "CBOE",
-      "value": 1.211,
+      "value": 1.207,
       "change_abs": 0,
       "change_pct": 0,
       "history": [],
-      "note": "SPY 4 expiry (put 912,811 / call 753,511)",
+      "note": "SPY 4 expiry (put 924,958 / call 766,536)",
       "ok": true
     }
   }
