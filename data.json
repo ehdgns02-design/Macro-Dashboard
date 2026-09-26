@@ -1,6 +1,6 @@
 {
-  "updated_at": "2026-09-26 08:45 KST",
-  "updated_at_unix": 1790379951,
+  "updated_at": "2026-09-27 08:21 KST",
+  "updated_at_unix": 1790464885,
   "indicators": {
     "sp500": {
       "name": "S&P 500",
@@ -62,7 +62,7 @@
         27244.279,
         26936.039,
         26939.369,
-        27068.717
+        27068.721
       ],
       "ok": true
     },
@@ -71,9 +71,9 @@
       "unit": "",
       "source": "yfinance",
       "value": 51828.62,
-      "prev": 51349.98,
+      "prev": 51350.0,
       "change_pct": 0.93,
-      "change_abs": 478.64,
+      "change_abs": 478.62,
       "history": [
         53559.988,
         53185.898,
@@ -135,9 +135,9 @@
       "unit": "",
       "source": "yfinance",
       "value": 101.035,
-      "prev": 101.285,
-      "change_pct": -0.25,
-      "change_abs": -0.25,
+      "prev": 100.971,
+      "change_pct": 0.06,
+      "change_abs": 0.064,
       "history": [
         99.7,
         99.43,
@@ -158,7 +158,7 @@
         100.6,
         101.1,
         101.29,
-        101.035
+        100.97
       ],
       "ok": true
     },
@@ -166,10 +166,10 @@
       "name": "유가 (WTI)",
       "unit": "USD",
       "source": "yfinance",
-      "value": 92.44,
+      "value": 92.41,
       "prev": 94.61,
-      "change_pct": -2.29,
-      "change_abs": -2.17,
+      "change_pct": -2.33,
+      "change_abs": -2.2,
       "history": [
         83.4,
         85.76,
@@ -190,7 +190,7 @@
         94.59,
         92.16,
         94.61,
-        92.44
+        92.41
       ],
       "ok": true
     },
@@ -254,7 +254,7 @@
         78.56,
         95.45,
         104.58,
-        96.003
+        96.0
       ],
       "ok": true
     },
@@ -386,11 +386,11 @@
       "name": "Put/Call Ratio",
       "unit": "",
       "source": "CBOE",
-      "value": 0.938,
+      "value": 0.997,
       "change_abs": 0,
       "change_pct": 0,
       "history": [],
-      "note": "SPY 4 expiry (put 6,032,809 / call 6,431,625)",
+      "note": "SPY 4 expiry (put 1,159,310 / call 1,162,595)",
       "ok": true
     }
   }
