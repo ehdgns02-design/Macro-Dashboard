@@ -1,6 +1,6 @@
 {
-  "updated_at": "2026-10-04 08:29 KST",
-  "updated_at_unix": 1791070175,
+  "updated_at": "2026-10-05 08:47 KST",
+  "updated_at_unix": 1791157656,
   "indicators": {
     "sp500": {
       "name": "S&P 500",
@@ -39,9 +39,9 @@
       "unit": "",
       "source": "yfinance",
       "value": 27190.863,
-      "prev": 26871.596,
+      "prev": 26871.6,
       "change_pct": 1.19,
-      "change_abs": 319.267,
+      "change_abs": 319.263,
       "history": [
         26506.99,
         26421.41,
@@ -71,9 +71,9 @@
       "unit": "",
       "source": "yfinance",
       "value": 51176.96,
-      "prev": 50926.56,
+      "prev": 50926.6,
       "change_pct": 0.49,
-      "change_abs": 250.4,
+      "change_abs": 250.36,
       "history": [
         53414.25,
         52786.07,
@@ -134,12 +134,11 @@
       "name": "달러인덱스 (DXY)",
       "unit": "",
       "source": "yfinance",
-      "value": 101.924,
+      "value": 101.896,
       "prev": 101.932,
-      "change_pct": -0.01,
-      "change_abs": -0.008,
+      "change_pct": -0.04,
+      "change_abs": -0.036,
       "history": [
-        99.16,
         98.84,
         98.77,
         99.09,
@@ -158,7 +157,8 @@
         101.37,
         101.45,
         102.1,
-        101.93
+        101.93,
+        101.896
       ],
       "ok": true
     },
@@ -167,11 +167,10 @@
       "unit": "USD",
       "source": "yfinance",
       "value": 91.11,
-      "prev": 92.87,
-      "change_pct": -1.9,
-      "change_abs": -1.76,
+      "prev": 91.11,
+      "change_pct": 0.0,
+      "change_abs": 0.0,
       "history": [
-        91.48,
         93.03,
         96.05,
         102.48,
@@ -190,6 +189,7 @@
         89.38,
         90.42,
         92.87,
+        91.11,
         91.11
       ],
       "ok": true
@@ -233,7 +233,7 @@
       "value": 107.287,
       "prev": 108.125,
       "change_pct": -0.78,
-      "change_abs": -0.8384,
+      "change_abs": -0.8382,
       "history": [
         73.1,
         76.14,
@@ -355,7 +355,8 @@
         -11.9
       ],
       "source_note": "AAII Sentiment Survey",
-      "ok": true
+      "ok": true,
+      "stale": true
     },
     "margindebt": {
       "name": "Margin Debt YoY",
@@ -386,11 +387,11 @@
       "name": "Put/Call Ratio",
       "unit": "",
       "source": "CBOE",
-      "value": 1.299,
+      "value": 1.298,
       "change_abs": 0,
       "change_pct": 0,
       "history": [],
-      "note": "SPY 4 expiry (put 1,101,370 / call 848,019)",
+      "note": "SPY 4 expiry (put 1,112,256 / call 856,721)",
       "ok": true
     }
   }
