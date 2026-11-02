@@ -1,6 +1,6 @@
 {
-  "updated_at": "2026-11-01 08:55 KST",
-  "updated_at_unix": 1793490926,
+  "updated_at": "2026-11-02 09:10 KST",
+  "updated_at_unix": 1793578253,
   "indicators": {
     "sp500": {
       "name": "S&P 500",
@@ -39,9 +39,9 @@
       "unit": "",
       "source": "yfinance",
       "value": 25436.998,
-      "prev": 26184.725,
+      "prev": 26184.7,
       "change_pct": -2.86,
-      "change_abs": -747.727,
+      "change_abs": -747.702,
       "history": [
         27477.311,
         27599.789,
@@ -71,9 +71,9 @@
       "unit": "",
       "source": "yfinance",
       "value": 51770.31,
-      "prev": 52342.56,
+      "prev": 52342.6,
       "change_pct": -1.09,
-      "change_abs": -572.25,
+      "change_abs": -572.29,
       "history": [
         51267.898,
         51521.281,
@@ -134,12 +134,11 @@
       "name": "달러인덱스 (DXY)",
       "unit": "",
       "source": "yfinance",
-      "value": 101.964,
+      "value": 101.982,
       "prev": 101.879,
-      "change_pct": 0.08,
-      "change_abs": 0.085,
+      "change_pct": 0.1,
+      "change_abs": 0.103,
       "history": [
-        102.17,
         101.83,
         102.24,
         102.14,
@@ -158,7 +157,8 @@
         102.32,
         102.19,
         102.04,
-        101.88
+        101.88,
+        101.982
       ],
       "ok": true
     },
@@ -166,12 +166,11 @@
       "name": "유가 (WTI)",
       "unit": "USD",
       "source": "yfinance",
-      "value": 104.12,
-      "prev": 102.0,
-      "change_pct": 2.08,
-      "change_abs": 2.12,
+      "value": 102.31,
+      "prev": 104.12,
+      "change_pct": -1.74,
+      "change_abs": -1.81,
       "history": [
-        89.43,
         89.44,
         88.28,
         91.49,
@@ -190,7 +189,8 @@
         99.9,
         102.78,
         102.0,
-        104.12
+        104.12,
+        102.3
       ],
       "ok": true
     },
@@ -386,11 +386,11 @@
       "name": "Put/Call Ratio",
       "unit": "",
       "source": "CBOE",
-      "value": 1.308,
+      "value": 1.314,
       "change_abs": 0,
       "change_pct": 0,
       "history": [],
-      "note": "SPY 4 expiry (put 1,396,429 / call 1,067,899)",
+      "note": "SPY 4 expiry (put 1,420,617 / call 1,080,796)",
       "ok": true
     }
   }
