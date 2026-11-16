@@ -1,6 +1,6 @@
 {
-  "updated_at": "2026-11-15 09:41 KST",
-  "updated_at_unix": 1794703278,
+  "updated_at": "2026-11-16 09:40 KST",
+  "updated_at_unix": 1794789640,
   "indicators": {
     "sp500": {
       "name": "S&P 500",
@@ -134,12 +134,11 @@
       "name": "달러인덱스 (DXY)",
       "unit": "",
       "source": "yfinance",
-      "value": 103.411,
+      "value": 103.421,
       "prev": 103.412,
-      "change_pct": -0.0,
-      "change_abs": -0.001,
+      "change_pct": 0.01,
+      "change_abs": 0.009,
       "history": [
-        101.98,
         101.73,
         101.78,
         101.61,
@@ -158,7 +157,8 @@
         102.23,
         102.91,
         103.17,
-        103.41
+        103.41,
+        103.421
       ],
       "ok": true
     },
@@ -166,12 +166,11 @@
       "name": "유가 (WTI)",
       "unit": "USD",
       "source": "yfinance",
-      "value": 88.56,
-      "prev": 88.74,
-      "change_pct": -0.2,
-      "change_abs": -0.18,
+      "value": 88.59,
+      "prev": 88.56,
+      "change_pct": 0.03,
+      "change_abs": 0.03,
       "history": [
-        103.66,
         101.79,
         97.15,
         99.47,
@@ -190,7 +189,8 @@
         86.04,
         86.53,
         88.74,
-        88.56
+        88.56,
+        88.59
       ],
       "ok": true
     },
