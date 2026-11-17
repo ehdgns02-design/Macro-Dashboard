@@ -1,17 +1,16 @@
 {
-  "updated_at": "2026-11-16 09:40 KST",
-  "updated_at_unix": 1794789640,
+  "updated_at": "2026-11-17 12:21 KST",
+  "updated_at_unix": 1794885713,
   "indicators": {
     "sp500": {
       "name": "S&P 500",
       "unit": "",
       "source": "yfinance",
-      "value": 7561.67,
-      "prev": 7592.4,
-      "change_pct": -0.4,
-      "change_abs": -30.73,
+      "value": 7416.59,
+      "prev": 7561.67,
+      "change_pct": -1.92,
+      "change_abs": -145.08,
       "history": [
-        7690.73,
         7712.57,
         7757.17,
         7663.43,
@@ -30,7 +29,8 @@
         7520.93,
         7619.38,
         7592.4,
-        7561.67
+        7561.67,
+        7416.59
       ],
       "ok": true
     },
@@ -38,12 +38,11 @@
       "name": "NASDAQ",
       "unit": "",
       "source": "yfinance",
-      "value": 25136.273,
-      "prev": 25366.1,
-      "change_pct": -0.91,
-      "change_abs": -229.827,
+      "value": 24509.758,
+      "prev": 25136.273,
+      "change_pct": -2.49,
+      "change_abs": -626.515,
       "history": [
-        26430.891,
         26424.82,
         26702.859,
         26008.859,
@@ -62,7 +61,8 @@
         25065.869,
         25466.189,
         25366.09,
-        25136.27
+        25136.27,
+        24509.758
       ],
       "ok": true
     },
@@ -70,12 +70,11 @@
       "name": "다우존스",
       "unit": "",
       "source": "yfinance",
-      "value": 52347.55,
-      "prev": 52297.1,
-      "change_pct": 0.1,
-      "change_abs": 50.45,
+      "value": 51608.17,
+      "prev": 52347.55,
+      "change_pct": -1.41,
+      "change_abs": -739.38,
       "history": [
-        51966.031,
         52495.879,
         52856.09,
         52867.98,
@@ -94,7 +93,8 @@
         52231.891,
         52486.488,
         52297.09,
-        52347.551
+        52347.551,
+        51608.172
       ],
       "ok": true
     },
@@ -102,12 +102,11 @@
       "name": "미 10년물 금리",
       "unit": "%",
       "source": "yfinance",
-      "value": 5.154,
-      "prev": 5.103,
-      "change_pct": 1.0,
-      "change_abs": 0.051,
+      "value": 5.121,
+      "prev": 5.154,
+      "change_pct": -0.64,
+      "change_abs": -0.033,
       "history": [
-        5.136,
         5.117,
         5.146,
         4.953,
@@ -126,7 +125,8 @@
         4.983,
         4.998,
         5.103,
-        5.154
+        5.154,
+        5.121
       ],
       "ok": true
     },
@@ -134,10 +134,10 @@
       "name": "달러인덱스 (DXY)",
       "unit": "",
       "source": "yfinance",
-      "value": 103.421,
-      "prev": 103.412,
-      "change_pct": 0.01,
-      "change_abs": 0.009,
+      "value": 103.527,
+      "prev": 103.549,
+      "change_pct": -0.02,
+      "change_abs": -0.022,
       "history": [
         101.73,
         101.78,
@@ -158,7 +158,7 @@
         102.91,
         103.17,
         103.41,
-        103.421
+        103.529
       ],
       "ok": true
     },
@@ -166,10 +166,10 @@
       "name": "유가 (WTI)",
       "unit": "USD",
       "source": "yfinance",
-      "value": 88.59,
-      "prev": 88.56,
-      "change_pct": 0.03,
-      "change_abs": 0.03,
+      "value": 85.18,
+      "prev": 85.72,
+      "change_pct": -0.63,
+      "change_abs": -0.54,
       "history": [
         101.79,
         97.15,
@@ -190,7 +190,7 @@
         86.53,
         88.74,
         88.56,
-        88.59
+        85.18
       ],
       "ok": true
     },
@@ -198,12 +198,11 @@
       "name": "VIX 지수",
       "unit": "",
       "source": "yfinance",
-      "value": 19.3,
-      "prev": 18.7,
-      "change_pct": 3.21,
-      "change_abs": 0.6,
+      "value": 22.91,
+      "prev": 19.3,
+      "change_pct": 18.7,
+      "change_abs": 3.61,
       "history": [
-        18.44,
         17.31,
         16.68,
         19.03,
@@ -222,7 +221,8 @@
         19.46,
         17.49,
         18.7,
-        19.3
+        19.3,
+        22.91
       ],
       "ok": true
     },
@@ -230,12 +230,11 @@
       "name": "MOVE 지수",
       "unit": "",
       "source": "yfinance",
-      "value": 98.79,
-      "prev": 98.43,
-      "change_pct": 0.37,
-      "change_abs": 0.3598,
+      "value": 101.282,
+      "prev": 98.79,
+      "change_pct": 2.52,
+      "change_abs": 2.4924,
       "history": [
-        101.1,
         101.3,
         101.7,
         95.94,
@@ -254,7 +253,8 @@
         85.98,
         92.43,
         98.43,
-        98.79
+        98.79,
+        101.282
       ],
       "ok": true
     },
@@ -262,12 +262,11 @@
       "name": "공포탐욕지수 (CNN)",
       "unit": "",
       "source": "CNN",
-      "value": 38.6,
+      "value": 31.0,
       "rating": "fear",
       "change_abs": 0.0,
       "change_pct": 0,
       "history": [
-        28.7,
         30.3,
         20.0,
         16.7,
@@ -285,8 +284,9 @@
         37.4,
         35.9,
         40.3,
-        38.6,
-        38.6
+        37.4,
+        31.0,
+        31.0
       ],
       "ok": true
     },
@@ -294,13 +294,11 @@
       "name": "하이일드 스프레드",
       "unit": "%p",
       "source": "FRED",
-      "value": 3.2,
-      "date": "2026-11-12",
-      "change_abs": -0.1,
-      "change_pct": -3.03,
+      "value": 3.23,
+      "date": "2026-11-13",
+      "change_abs": 0.03,
+      "change_pct": 0.94,
       "history": [
-        3.23,
-        3.31,
         3.29,
         3.33,
         3.27,
@@ -318,7 +316,9 @@
         3.42,
         3.34,
         3.3,
-        3.2
+        3.3,
+        3.2,
+        3.23
       ],
       "ok": true
     },
@@ -355,7 +355,8 @@
         -20.6
       ],
       "source_note": "AAII Sentiment Survey",
-      "ok": true
+      "ok": true,
+      "stale": true
     },
     "margindebt": {
       "name": "Margin Debt YoY",
@@ -386,11 +387,11 @@
       "name": "Put/Call Ratio",
       "unit": "",
       "source": "CBOE",
-      "value": 0.853,
+      "value": 1.32,
       "change_abs": 0,
       "change_pct": 0,
       "history": [],
-      "note": "SPY 4 expiry (put 921,412 / call 1,079,964)",
+      "note": "SPY 4 expiry (put 1,469,177 / call 1,113,377)",
       "ok": true
     }
   }
