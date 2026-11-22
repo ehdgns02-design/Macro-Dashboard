@@ -1,6 +1,6 @@
 {
-  "updated_at": "2026-11-21 10:56 KST",
-  "updated_at_unix": 1795226208,
+  "updated_at": "2026-11-22 09:53 KST",
+  "updated_at_unix": 1795308816,
   "indicators": {
     "sp500": {
       "name": "S&P 500",
@@ -62,7 +62,7 @@
         24328.381,
         24429.881,
         23879.199,
-        22617.732
+        22617.73
       ],
       "ok": true
     },
@@ -71,9 +71,9 @@
       "unit": "",
       "source": "yfinance",
       "value": 48147.33,
-      "prev": 49097.06,
+      "prev": 49097.1,
       "change_pct": -1.93,
-      "change_abs": -949.73,
+      "change_abs": -949.77,
       "history": [
         52361.578,
         52377.57,
@@ -135,9 +135,9 @@
       "unit": "",
       "source": "yfinance",
       "value": 103.84,
-      "prev": 103.895,
-      "change_pct": -0.05,
-      "change_abs": -0.055,
+      "prev": 103.807,
+      "change_pct": 0.03,
+      "change_abs": 0.033,
       "history": [
         101.96,
         102.32,
@@ -158,7 +158,7 @@
         103.49,
         103.86,
         103.9,
-        103.84
+        103.81
       ],
       "ok": true
     },
@@ -166,10 +166,10 @@
       "name": "유가 (WTI)",
       "unit": "USD",
       "source": "yfinance",
-      "value": 83.62,
+      "value": 83.41,
       "prev": 82.44,
-      "change_pct": 1.43,
-      "change_abs": 1.18,
+      "change_pct": 1.18,
+      "change_abs": 0.97,
       "history": [
         101.76,
         99.9,
@@ -190,7 +190,7 @@
         86.01,
         83.26,
         83.21,
-        83.62
+        83.98
       ],
       "ok": true
     },
@@ -254,7 +254,7 @@
         101.88,
         98.15,
         96.04,
-        106.312
+        106.31
       ],
       "ok": true
     },
